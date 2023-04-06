@@ -1,2 +1,5 @@
 commit jupyter notebook without output to git and keep output locally: 
 https://gist.github.com/33eyes/431e3d432f73371509d176d0dfb95b6e
+
+NOTE: 
+- you have to have activated a virtualenv with nbconvert installed at the time you add/commit a jupyter nb for this to work 
