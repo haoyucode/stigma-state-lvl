@@ -1,0 +1,112 @@
+[
+    {
+        "type":"Linkage",
+        "states":"MD",
+        "hub":"Friends"
+    },
+    {
+        "type":"State policy rollout",
+        "states":"MA",
+        "hub":"Mass\/BayState"
+    },
+    {
+        "type":"State policy rollout",
+        "states":"NY",
+        "hub":"State of New York\/NYSPI"
+    },
+    {
+        "type":"Linkage",
+        "states":"IL",
+        "hub":"Chestnut"
+    },
+    {
+        "type":"MOUD comparative effectiveness",
+        "states":"NJ",
+        "hub":"NYU"
+    },
+    {
+        "type":"MOUD comparative effectiveness",
+        "states":"NY",
+        "hub":"NYU"
+    },
+    {
+        "type":"MOUD comparative effectiveness",
+        "states":"DE",
+        "hub":"NYU"
+    },
+    {
+        "type":"MOUD comparative effectiveness",
+        "states":"OR",
+        "hub":"NYU"
+    },
+    {
+        "type":"MOUD comparative effectiveness",
+        "states":"CT",
+        "hub":"NYU"
+    },
+    {
+        "type":"MOUD comparative effectiveness",
+        "states":"NH",
+        "hub":"NYU"
+    },
+    {
+        "type":"Linkage",
+        "states":"IN",
+        "hub":"Indiana"
+    },
+    {
+        "type":"Linkage",
+        "states":"IL",
+        "hub":"U Chicago - ROMI"
+    },
+    {
+        "type":"Linkage",
+        "states":"TX",
+        "hub":"TCU"
+    },
+    {
+        "type":"Linkage",
+        "states":"KY",
+        "hub":"UKY"
+    },
+    {
+        "type":"Linkage",
+        "states":"CT",
+        "hub":"Yale - TCN"
+    },
+    {
+        "type":"Linkage",
+        "states":"NY",
+        "hub":"Yale - TCN"
+    },
+    {
+        "type":"Linkage",
+        "states":"NC",
+        "hub":"Yale - TCN"
+    },
+    {
+        "type":"Linkage",
+        "states":"MN",
+        "hub":"Yale - TCN"
+    },
+    {
+        "type":"Linkage",
+        "states":"PR",
+        "hub":"Yale - TCN"
+    },
+    {
+        "type":"Linkage",
+        "states":"RI",
+        "hub":"Brown"
+    },
+    {
+        "type":"Linkage",
+        "states":"NC",
+        "hub":"Brown"
+    },
+    {
+        "type":"Linkage",
+        "states":"PA",
+        "hub":"Brown"
+    }
+]
