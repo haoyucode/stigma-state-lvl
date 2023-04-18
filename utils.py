@@ -143,5 +143,5 @@ def concat_groupby(groups):
     """ 
     grouped_df = pd.DataFrame(
     [pd.Series(group,name=name) 
-    for name,group in state_bootstrap_stats])
+    for name,group in groups])
     return grouped_df
