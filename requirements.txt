@@ -6,3 +6,5 @@ pyreadstat==1.2.1
 pandas==1.4
 
 joblib==1.2.0
+
+ydata-profiling

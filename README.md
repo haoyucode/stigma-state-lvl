@@ -11,3 +11,9 @@ Get all packages used and dependencies:
 `personaluse_ever_protocol2<latestn>.ipynb` contains the latest analysis.
 
 Functions for this notebook have been refactored to `utils.py`
+
+
+`strata-and-clusters-exploration`
+contains exploration to identify the proper 
+groups with the goal of understanding how to 
+make correct bootstrap weights
