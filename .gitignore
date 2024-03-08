@@ -1,6 +1,6 @@
 # User defined
 
-/data/*
+#/data/*
 !/data/jcoin_states.json
 !/data/state_abbrev_mappings.json
 
