@@ -7,7 +7,7 @@ MAARC Stigma Survey Protocol 2 ("in-depth")
 Project Organization
 ------------
 
-NOTE: only included what makes sense for know. below is the default cookiecutter data science structure.
+NOTE: only included what makes sense for now. below is the default cookiecutter data science structure.
 TODO: modify this to given directory (e.g., changed some of the src package names, changed docs to markdown from rst (given comfortability using mkdocs -- may not need this but put here just in case))
 
     ├── README.md          <- The top-level README for developers using this project.
