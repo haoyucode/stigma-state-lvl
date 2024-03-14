@@ -12,9 +12,11 @@ NOTE: only included what makes sense for now. below is the default cookiecutter 
 - [ ] TODO: modify this to given directory (e.g., changed some of the src package names, changed docs to markdown
 - [ ] TODO: port to the more updated v2 cookie cutter data science template -- it is currently on the v2 branch of the cookiecutter data science repo (note this moves to mkdocs as in 1)
 - [ ] TODO: replace requirements.txt with the "locked" version (ChatGPT says using "locked" version is better for analytic repos for reproducibility and supporting both an unlocked and locked is possible but may increase complexity)
+    - NOTE: talked to Phil - he mentioned this may be overkill for most analyses. However, lets keep in here and decide at next "reorg" step as I think it could be still good for a proof of concept.
 - [ ] TODO: Makefile: Windows does not support Makefiles -- one potential solution is to use docker. I commented on this issue [in cookiecutter-datascience here](https://github.com/drivendata/cookiecutter-data-science/issues/333)
 - [ ] TODO: use datapackage.json in Makefile for any documentation or views (ie data dictionary, graphs etc)
 comfortability using mkdocs -- may not need this but put here just in case)
+    
 
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
