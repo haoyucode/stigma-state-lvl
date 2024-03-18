@@ -6,6 +6,7 @@
 # **To follow the full analysis, click through the hidden analysis code below**
 # ```
 
+
 # %%
 # import packages
 import os
@@ -17,13 +18,205 @@ import pyreadstat
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
+from utils import *
+from samplics.estimation import TaylorEstimator
+pd.set_option('mode.chained_assignment', None)
 
 # %% [markdown]
 # ### Data cleaning/pre-processing
 
 # %%
 # inputs
+STATE_ABBREVIATIONS = "state_abbrev_mappings.json"
 DATAPATH = "P:/3652/Common/HEAL/y3-task-c-collaborative-projects/jcoin-stigma/analyses/data/protocol2/"
+DATA_FILE = DATAPATH+"3645_JCOIN_HEAL Initiative 2021_NORC_Jan2022_1.sav"
+STRATA_FILE = DATAPATH+"VSTRAT_VPSU_Survey_2039_HEAL_MAIN_21_05_14.csv"
+
+# %%
+# import data and metadata (data dictionaries)
+df, meta = pyreadstat.read_sav(DATA_FILE,apply_value_formats=True)
+
+
+# %%
+
+# lower-case column names 
+df.columns = df.columns.str.lower()
+
+# %%
+vars_of_interest = ["caseid",'p_over','weight1','weight2','stigma_scale_score','expanded_10item_stigma','state','age4','racethnicity','educ5','personaluse_ever','familyuse_ever','personalcrimjust_ever','familycrimjust_ever']
+categorical_vars = ['p_over','state','age4','racethnicity','educ5',
+    'personaluse_ever','familyuse_ever',
+    'personalcrimjust_ever','familycrimjust_ever']
+
+
+
+# %%
+# to enable more granular analysis of the stigma scale score(s) - e.g. parsing impact of current versus past OUD on stigma - bring in the individual ss questions
+
+# ss_a_historywork - agree means low stigma/high val means low stigma
+# ss_b_historymarry - agree means low stigma/high val means low stigma
+# ss_c_currentwork - agree means low stigma/high val means low stigma
+# ss_d_currentmarry - agree means low stigma/high val means low stigma
+
+# -------- use the reverse coded for history and current work and marry vars - these ones are the only ss questions where agree means low stigma, using the reverse coded version brings them in line with the others for easier analysis
+
+# ss_a_historywork_rev - already converted to numeric/high val means high stigma
+# ss_b_historymarry_rev - already converted to numeric/high val means high stigma
+# ss_c_currentwork_rev - already converted to numeric/high val means high stigma
+# ss_d_currentmarry_rev - already converted to numeric/high val means high stigma
+
+# ss_e_dangerous - agree means high stigma/high val means high stigma
+# ss_f_ trust - agree means high stigma/high val means high stigma
+# ss_history_steal - agree means high stigma/high val means high stigma
+# ss_historyhighrisk - agree means high stigma/high val means high stigma
+# ss_currentsteal - agree means high stigma/high val means high stigma
+# ss_currenthighrisk - agree means high stigma/high val means high stigma
+
+ss_6_past = ['ss_a_historywork_rev','ss_b_historymarry_rev']
+ss_6_current = ['ss_c_currentwork_rev','ss_d_currentmarry_rev','ss_e_dangerous','ss_f_trust']
+
+ss_6_full = ss_6_past + ss_6_current
+
+ss_10_past = ['ss_historysteal', 'ss_historyhighrisk']
+ss_10_current = ['ss_currentsteal', 'ss_currenthighrisk']
+
+ss_10_full = ss_6_full + ss_10_past + ss_10_current
+
+ss_past = ss_6_past + ss_10_past
+ss_current = ss_6_current + ss_10_current
+
+
+
+
+
+# %%
+# to enable parsing of stigma by political affiliation, views on race/ethnicity, and experience of racial/ethnic discrimination bring in variables assessing those items
+
+# political = ['pid1','pida','pidb','pidi','partyid7','partyid5']
+political = ['partyid5']
+
+race = ['race_whiteadvantage','race_rich']
+
+# race_whiteadvanctage: [White people in the U.S. have certain advantages because of the color of their skin.] Do you disagree or agree with the following statements?
+    # agree corresponds with recognition of white advantage; high vals = recognition of white advantage
+    # reverse code this from likert vars so that high vals will now indicate lack of recognition of white advantage
+
+# race_rich: [Everyone who works hard, no matter what race they are, has an equal chance to become rich.] Do you disagree or agree with the following statements?
+    # agree corresponds with lack of recognition of white advantage; high vals = lack of recognition of white advantage
+    # code this along with the likert vars where high vals = high stigma; in this case high vals = lack of recognition of white advantage
+
+#discrimination_experience = ['times_atschool', 'times_hired', 'times_atwork', 'times_housing', 'times_medcare', 'times_restaurant', 'times_credit', 'times_street', 'times_police']
+
+# possible approach: 
+    # add count of dicrimination experiences (times) across categories
+    # higher numbers mean more discrimination experience
+
+
+
+# %%
+likert_replace_vars = ['ss_e_dangerous','ss_f_trust','ss_historysteal', 'ss_historyhighrisk','ss_currentsteal', 'ss_currenthighrisk','race_rich']
+likert_reverse_replace_vars = ['race_whiteadvantage']
+
+# %%
+
+#additional_vars_of_interest = ss_10_full + political + race + discrimination_experience
+additional_vars_of_interest = ["caseid"] + ss_10_full + political + race 
+all_vars_of_interest = vars_of_interest + additional_vars_of_interest
+
+
+
+# %%
+# narrow down the dataset to only a few interesting (and relatively clean, straightforward variables) - check for missingness and impute to fill in missing
+sub_df_1 = df[vars_of_interest]
+sub_df_2 = df[additional_vars_of_interest]
+
+# %%
+sub_df_2
+
+# %%
+# get all var types
+print("var info: ")
+print(sub_df_2.info())
+
+# all new vars (except the reverse coded individual stigma scale questions) are categorical
+
+# %%
+# check for missing I
+
+# check if missing values
+print("missing values: ")
+print(sub_df_2.isnull().sum())
+
+# check if missing values
+print("missing values: ")
+print(sub_df_2.isna().sum())
+
+# every var has at least some missing, except for partyid7
+
+# %%
+#print("ss single questions, categories: ")
+#print(sub_df_2.ss_a_historywork.value_counts(dropna=False))
+
+print("ss single questions, categories: ")
+print(sub_df_2.ss_a_historywork_rev.value_counts(dropna=False))
+
+print("ss single questions, categories: ")
+print(sub_df_2.ss_e_dangerous.value_counts(dropna=False))
+
+#print("party id 7 composite question, categories: ")
+#print(sub_df_2.partyid7.value_counts(dropna=False))
+
+print("party id 5 composite question, categories: ")
+print(sub_df_2.partyid5.value_counts(dropna=False))
+
+#print("discrimination times single questions, categories: ")
+#print(sub_df_2.times_atschool.value_counts(dropna=False))
+
+# %%
+likert_replacer = {'Strongly disagree': 1, 
+                   'Somewhat disagree': 2,
+                   'Neither disagree nor agree': 3,
+                   'Somewhat agree': 4, 
+                   'Strongly agree': 5}
+
+likert_reverse_replacer = {'Strongly disagree': 5, 
+                           'Somewhat disagree': 4,
+                           'Neither disagree nor agree': 3,
+                           'Somewhat agree': 2, 
+                           'Strongly agree': 1}
+
+sub_df_2[likert_replace_vars].replace(likert_replacer, inplace=True)
+sub_df_2[likert_replace_vars] = sub_df_2[likert_replace_vars].astype("float")
+
+sub_df_2[likert_reverse_replace_vars].replace(likert_reverse_replacer, inplace=True)
+sub_df_2[likert_reverse_replace_vars] = sub_df_2[likert_reverse_replace_vars].astype("float")
+
+#sub_df_2['partyid5_any_d'] = np.where(sub_df_2['partyid5'] in ["Democrat","Lean Democrat"], 1,0)
+sub_df_2['partyid5_strong_d'] = np.where(sub_df_2['partyid5'] == "Democrat", 1,0)
+#sub_df_2['partyid5_any_r'] = np.where(sub_df_2['partyid5'] in ["Republican","Lean Republican"], 1,0)
+sub_df_2['partyid5_strong_r'] = np.where(sub_df_2['partyid5'] == "Republican", 1,0)
+
+sub_df_2.drop(['partyid5'], axis=1, inplace=True)
+
+sub_df_2
+
+
+
+# %%
+# check for missing I
+
+# check if missing values
+print("missing values: ")
+print(sub_df_2.isnull().sum())
+
+# check if missing values
+print("missing values: ")
+print(sub_df_2.isna().sum())
+
+# %%
+# get all var types
+print("var info: ")
+print(sub_df_2.info())
 
 # %%
 mode_impute_vars = ss_10_full + race
@@ -65,6 +258,13 @@ print("var info: ")
 print(sub_df_2.info())
 
 # %%
+# clean up some of the categoricals to be consistently coded
+sub_df_1.familycrimjust_ever.replace({0:"No",1:"Yes"},inplace=True)
+sub_df_1.familyuse_ever.replace({" No":"No"},inplace=True)
+sub_df_1.personalcrimjust_ever.replace({"Yes, ever arrested or incarcerated":"Yes", "No, never arrested or incarcerated":"No"},inplace=True)
+
+
+# %%
 # check for missing 
 
 print(sub_df_1.isnull().sum())
@@ -96,6 +296,14 @@ sub_df_1['stigma_scale_score'].fillna(sub_df_1['stigma_scale_score'].median(),in
 sub_df_1['expanded_10item_stigma'].fillna(sub_df_1['expanded_10item_stigma'].median(),inplace=True)
 
 print(sub_df_1.isnull().sum())
+
+# %%
+# add df column with state 2 letter code
+# https://pythonfix.com/code/us-states-abbrev.py/
+# state name to two letter code dictionary
+us_state_to_abbrev = json.loads(Path(STATE_ABBREVIATIONS).read_text())
+state_cd = sub_df_1.state.replace(us_state_to_abbrev)
+sub_df_1.insert(6,"state_cd",state_cd,True)
 
 # %%
 # Add jcoin information
