@@ -1,3 +1,8 @@
+""" 
+Creates analytic dataset for analyses
+TODO: create schema with additional metadata (ie descriptions for derived variables and scale groupings) for this dataset
+
+"""
 # %% [markdown]
 # # Stigma against Opioid Use Disorder varies by Personal Use status
 
@@ -17,10 +22,10 @@ import numpy as np
 import pyreadstat
 # %% [markdown]
 # ### Data cleaning/pre-processing
-
+os.chdir(Path(__file__).parents[3])
 # %%
 # inputs
-STATE_ABBREVIATIONS = "state_abbrev_mappings.json"
+STATE_ABBREVIATIONS = "data/state_abbrev_mappings.json"
 DATAPATH = "P:/3652/Common/HEAL/y3-task-c-collaborative-projects/jcoin-stigma/analyses/data/protocol2/"
 DATA_FILE = DATAPATH+"3645_JCOIN_HEAL Initiative 2021_NORC_Jan2022_1.sav"
 STRATA_FILE = DATAPATH+"VSTRAT_VPSU_Survey_2039_HEAL_MAIN_21_05_14.csv"
@@ -207,7 +212,7 @@ sub_df_1.insert(6,"state_cd",state_cd,True)
 
 # %%
 # Add jcoin information
-jcoin_json = json.loads(Path("jcoin_states.json").read_text())
+jcoin_json = json.loads(Path("data/jcoin_states.json").read_text())
 
 jcoin_df = (pd.DataFrame(jcoin_json)
     .assign(hub_types=lambda df:df["hub"]+"("+df["type"]+")")
@@ -325,6 +330,27 @@ strata_df_in_as_oversample_state["vpsu32_corrected"] = strata_df_in_as_oversampl
 
 # %%
 # join strata into dataset
-sub_df_1 = sub_df_1.set_index("caseid").join(strata_df.set_index('caseid'))
 
-sub_df_1_as_oversample_states = sub_df_1_as_oversample_states.set_index("caseid").join(strata_df_in_as_oversample_state.set_index('caseid'))
+fullsample_strata_df = (
+    strata_df
+    .set_index("caseid")
+    [["vstrat32_corrected","vpsu32_corrected"]]
+    .rename(columns={"vstrat32_corrected":"strata_fullsample","vpsu32_corrected":"psu_fullsample"})
+)
+oversample_strata_df = (
+    strata_df
+    .set_index("caseid")
+    [["vstrat32_corrected","vpsu32_corrected"]]
+    .rename(columns={"vstrat32_corrected":"strata_oversample","vpsu32_corrected":"psu_oversample"})
+)
+sub_df_1 = (
+    sub_df_1
+    .set_index("caseid")
+    .join(fullsample_strata_df)
+    .join(oversample_strata_df)
+    .assign(isin_state_with_oversample=lambda df:df.index.isin(caseid_in_as_oversample_state))
+)
+
+
+sub_df_1.to_csv("data/processed/protocol2_wave1_analytic.csv")
+
