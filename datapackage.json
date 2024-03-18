@@ -15,7 +15,7 @@
             "path":"data/jcoin_states.json"
         },
         {
-            "name":"data/state_abbrev_mappings.json"
+            "path":"data/state_abbrev_mappings.json"
         },
         {
             "name":"strata-and-psu",
