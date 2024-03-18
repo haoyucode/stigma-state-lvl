@@ -39,8 +39,8 @@ def get_national_estimates(df,ycol):
     estimator.estimate(
         y=sub_df_1[col],
         samp_weight=sub_df_1["weight2"],
-        stratum=sub_df_1["vstrat32_corrected"],
-        psu=sub_df_1["vpsu32_corrected"],
+        stratum=sub_df_1["strata_fullsample"],
+        psu=sub_df_1["psu_fullsample"],
     )
     estimates = estimator.to_dataframe()
 
@@ -51,21 +51,27 @@ def get_national_estimates(df,ycol):
     return estimates
 
 
-def get_domain_estimates(df,col,domaincol):
+def get_domain_estimates(df,col,domaincol,stratacol,psucol):
 
     estimator = TaylorEstimator("mean")
     estimator.estimate(
         y=df[col],
         samp_weight=df["weight2"],
-        stratum=df["vstrat32_corrected"],
-        psu=df["vpsu32_corrected"],
+        stratum=sub_df_1[stratacol],
+        psu=sub_df_1[psucol],
         domain=df[domaincol]
     )
     return estimator.to_dataframe()
 
-#estimator_df = sub_df_1_as_oversample_states[sub_df_1_as_oversample_states["partyid5_strong_d"] == 1]
+#NOTE: in 4/20 meeting notebook, `estimator_df = sub_df_1_as_oversample_states[sub_df_1_as_oversample_states["partyid5_strong_d"] == 1]`
+# in addition to strong_r. I'm wondering why the reasoning behind this..
 def get_state_estimates(df,col):
-    estimates = get_domain_estimates(df,col,domaincol="state_cd")
+
+    stratacol = "strata_oversample"
+    psucol = "psu_oversample"
+    domaincol = "state_cd"
+
+    estimates = get_domain_estimates(df,col,domaincol=domaincol,stratacol=stratacol,psucol=psucol)
     estimates.insert(0,"geo","state")
     estimates.insert(0,"var",col)
 
