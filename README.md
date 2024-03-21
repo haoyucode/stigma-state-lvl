@@ -9,6 +9,7 @@ Project Organization
 
 NOTE: only included what makes sense for now. below is the default cookiecutter data science structure.
 
+- [ ] TODO: use dvc for data file versioning
 - [ ] TODO: modify this to given directory (e.g., changed some of the src package names, changed docs to markdown
 - [ ] TODO: port to the more updated v2 cookie cutter data science template -- it is currently on the v2 branch of the cookiecutter data science repo (note this moves to mkdocs as in 1)
 - [ ] TODO: replace requirements.txt with the "locked" version (ChatGPT says using "locked" version is better for analytic repos for reproducibility and supporting both an unlocked and locked is possible but may increase complexity)
@@ -46,15 +47,12 @@ comfortability using mkdocs -- may not need this but put here just in case)
     │   ├── __init__.py    <- Makes src a Python module
     │   │
     │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
+    │   │   └── transform.py
     │   │
     │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
+    │   │   │                 predictions 
+    │   │   ├── taylor_series.py
+    │   │  
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
     │       └── visualize.py
