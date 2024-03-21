@@ -17,6 +17,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 
+
 def generate_bar_chart(estimate_df):
     ax = sns.barplot(data=estimate_df, x="var", y="_estimate", color="dodgerblue", dodge=False)
     ax.errorbar(data=estimate_df, x="var", y='_estimate', yerr=[estimate_df["_estimate"] - estimate_df["_lci"],estimate_df["_uci"] - estimate_df["_estimate"]], ls='', color='black')

@@ -34,7 +34,7 @@ STRATA_FILE = DATAPATH+"VSTRAT_VPSU_Survey_2039_HEAL_MAIN_21_05_14.csv"
 # import data and metadata (data dictionaries)
 df, meta = pyreadstat.read_sav(DATA_FILE,apply_value_formats=True)
 
-
+schema = ""
 # %%
 
 # lower-case column names 

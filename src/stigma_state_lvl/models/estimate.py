@@ -15,24 +15,6 @@ from pathlib import Path
 import pandas as pd
 from samplics.estimation import TaylorEstimator
 
-# %% [markdown]
-
-# %%
-# o	table/bar: 
-# 	point estimate + bootstrap CI; based on gen pop and weight1 
-# o	table/bar: 
-# 	point estimate + bootstrap CI; based on as oversample + gen pop and weight 2
-# o	histogram: 
-# 	distribution; based on as oversample + gen pop and weight 2
-# 	distribution by personaluse_ever, familyuse_ever, personalcrimjust_ever, familycrimjust_ever; based on as oversample + gen pop and weight 2
-
-
-# %% [markdown]
-## General population
-
-# %%
-measure_list = ["stigma_scale_score","ss_6_past","ss_6_current","race_view_flag","partyid5_strong_d","partyid5_strong_r"]
-
 def get_national_estimates(df,ycol): 
 
     estimator = TaylorEstimator("mean")
