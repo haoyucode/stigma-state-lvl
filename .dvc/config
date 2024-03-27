@@ -1,0 +1,4 @@
+[core]
+    remote = pdrive
+['remote "pdrive"']
+    url = P:\3652\Common\HEAL\y3-task-c-collaborative-projects\jcoin-stigma\analyses\data\dvc
