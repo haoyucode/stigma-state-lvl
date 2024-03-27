@@ -15,8 +15,7 @@ measure_list = [
 
 resource = frictionless.Resource(path="data/processed/protocol2_wave1_analytic.csv")
 data = resource.to_pandas()
-
-national_scalescore6_estimates = models.get_national_estimates(data,)
-national_scalescore6_plot = visualization.generate_bar_chart(estimate_df)
-state_scalescore_6_estimates = models.get_state_estimates()
-state_scalescore_6_plot = visualization.generate_bar_chart(estimate_df)
+national_scalescore6_estimates = models.get_national_estimates(data)
+national_scalescore6_plot = visualization.generate_bar_chart(national_scalescore6_estimates)
+state_scalescore6_estimates = models.get_state_estimates()
+state_scalescore6_plot = visualization.generate_bar_chart(estimate_df)
