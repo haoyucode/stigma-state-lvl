@@ -1,5 +1,5 @@
 -e . # install the project code into virtual environment in editable mode
-git+https://github.com/norc-heal/healdata-utils.git@pr-integration
+#git+https://github.com/norc-heal/healdata-utils.git@pr-integration
 jupyter>=1.0.0
 seaborn>=0.11.2
 plotly>=5.14.1
