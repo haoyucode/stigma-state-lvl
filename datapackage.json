@@ -20,7 +20,7 @@
         },
         {
             "name":"strata-and-psu",
-            "path":"data/raw/strata-and-clusters.csv"
+            "path":"data/raw/strata-and-psu.csv"
         },
         {
             "name":"wave1-with-states-processed",
