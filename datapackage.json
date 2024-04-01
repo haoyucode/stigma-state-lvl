@@ -7,7 +7,7 @@
     "resources":[
         {
             "name":"wave1-with-states",
-            "path":"data/raw/3645_JCOIN_HEAL Initiative 2021_NORC_Jan2022_1.sav",
+            "path":"data/raw/wave1.sav",
             "description":"Contains data file of state level analyses of opioid use disorder (OUD) using the JCOIN MAARC Stigma Survey Protocol 2 ('in-depth')"
         },
         {
@@ -20,7 +20,7 @@
         },
         {
             "name":"strata-and-psu",
-            "path":"data/raw/VSTRAT_VPSU_Survey_2039_HEAL_MAIN_21_05_14.csv"
+            "path":"data/raw/strata-and-clusters.csv"
         },
         {
             "name":"wave1-with-states-processed",
