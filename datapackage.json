@@ -1,30 +1,266 @@
 {
-    "name":"stigma-state-lvl",
-    "profile":"data-package",
-    "title":"",
-    "description":"State level analyses of opioid use disorder (OUD) using the JCOIN MAARC Stigma Survey Protocol 2 ('in-depth')",
-    "readme":"Put the readme contents here?",
-    "resources":[
-        {
-            "name":"wave1-with-states",
-            "path":"data/raw/wave1.sav",
-            "description":"Contains data file of state level analyses of opioid use disorder (OUD) using the JCOIN MAARC Stigma Survey Protocol 2 ('in-depth')"
-        },
-        {
-            "name":"jcoin-states",
-            "path":"data/jcoin_states.json"
-        },
-        {
-            "name":"state-abbreviations",
-            "path":"data/state_abbrev_mappings.json"
-        },
-        {
-            "name":"strata-and-psu",
-            "path":"data/raw/strata-and-psu.csv"
-        },
-        {
-            "name":"wave1-with-states-processed",
-            "path":"data/processed/protocol2_wave1_analytic.csv"
-        }
-    ]
+  "name": "stigma-state-lvl",
+  "title": "",
+  "description": "State level analyses of opioid use disorder (OUD) using the JCOIN MAARC Stigma Survey Protocol 2 ('in-depth')",
+  "profile": "data-package",
+  "resources": [
+    {
+      "name": "wave1-with-states",
+      "type": "table",
+      "description": "Contains data file of state level analyses of opioid use disorder (OUD) using the JCOIN MAARC Stigma Survey Protocol 2 ('in-depth')",
+      "path": "data/raw/wave1.sav",
+      "scheme": "file",
+      "format": "sav"
+    },
+    {
+      "name": "jcoin-states",
+      "type": "json",
+      "path": "data/jcoin_states.json",
+      "scheme": "file",
+      "format": "json",
+      "mediatype": "text/json"
+    },
+    {
+      "name": "state-abbreviations",
+      "type": "json",
+      "path": "data/state_abbrev_mappings.json",
+      "scheme": "file",
+      "format": "json",
+      "mediatype": "text/json"
+    },
+    {
+      "name": "strata-and-psu",
+      "type": "table",
+      "path": "data/raw/strata-and-psu.csv",
+      "scheme": "file",
+      "format": "csv",
+      "mediatype": "text/csv"
+    },
+    {
+      "name": "wave1-with-states-processed",
+      "type": "table",
+      "path": "data/processed/protocol2_wave1_analytic.csv",
+      "scheme": "file",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "encoding": "utf-8",
+      "schema": {
+        "fields": [
+          {
+            "name": "caseid",
+            "type": "number"
+          },
+          {
+            "name": "p_over",
+            "type": "string"
+          },
+          {
+            "name": "weight1",
+            "type": "number"
+          },
+          {
+            "name": "weight2",
+            "type": "number"
+          },
+          {
+            "name": "stigma_scale_score",
+            "type": "number"
+          },
+          {
+            "name": "expanded_10item_stigma",
+            "type": "number"
+          },
+          {
+            "name": "state_cd",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "age4",
+            "type": "string"
+          },
+          {
+            "name": "racethnicity",
+            "type": "string"
+          },
+          {
+            "name": "educ5",
+            "type": "string"
+          },
+          {
+            "name": "personaluse_ever",
+            "type": "string"
+          },
+          {
+            "name": "familyuse_ever",
+            "type": "string"
+          },
+          {
+            "name": "personalcrimjust_ever",
+            "type": "string"
+          },
+          {
+            "name": "familycrimjust_ever",
+            "type": "string"
+          },
+          {
+            "name": "jcoin_hub_types",
+            "type": "string"
+          },
+          {
+            "name": "jcoin_hub_count",
+            "type": "number"
+          },
+          {
+            "name": "jcoin_flag",
+            "type": "number"
+          },
+          {
+            "name": "is_jcoin_hub",
+            "type": "string"
+          },
+          {
+            "name": "ss_a_historywork_rev",
+            "type": "number"
+          },
+          {
+            "name": "ss_b_historymarry_rev",
+            "type": "number"
+          },
+          {
+            "name": "ss_c_currentwork_rev",
+            "type": "number"
+          },
+          {
+            "name": "ss_d_currentmarry_rev",
+            "type": "number"
+          },
+          {
+            "name": "ss_e_dangerous",
+            "type": "number"
+          },
+          {
+            "name": "ss_f_trust",
+            "type": "number"
+          },
+          {
+            "name": "ss_historysteal",
+            "type": "number"
+          },
+          {
+            "name": "ss_historyhighrisk",
+            "type": "number"
+          },
+          {
+            "name": "ss_currentsteal",
+            "type": "number"
+          },
+          {
+            "name": "ss_currenthighrisk",
+            "type": "number"
+          },
+          {
+            "name": "race_whiteadvantage",
+            "type": "number"
+          },
+          {
+            "name": "race_rich",
+            "type": "number"
+          },
+          {
+            "name": "partyid5_strong_d",
+            "type": "integer"
+          },
+          {
+            "name": "partyid5_strong_r",
+            "type": "integer"
+          },
+          {
+            "name": "ss_6_past",
+            "type": "number"
+          },
+          {
+            "name": "ss_6_current",
+            "type": "number"
+          },
+          {
+            "name": "ss_past",
+            "type": "number"
+          },
+          {
+            "name": "ss_current",
+            "type": "number"
+          },
+          {
+            "name": "race_view_flag",
+            "type": "integer"
+          },
+          {
+            "name": "strata_fullsample",
+            "type": "integer"
+          },
+          {
+            "name": "psu_fullsample",
+            "type": "integer"
+          },
+          {
+            "name": "strata_oversample",
+            "type": "integer"
+          },
+          {
+            "name": "psu_oversample",
+            "type": "integer"
+          },
+          {
+            "name": "isin_state_with_oversample",
+            "type": "boolean"
+          }
+        ]
+      }
+    },
+    {
+      "name": "national_scalescore6_estimates",
+      "type": "table",
+      "title": "National stigma scale score (6 item) estimates",
+      "description": "National stigma scale estimation and variances for the 6 stigma scale score",
+      "path": "data/processed/national-scalescore6-estimates.csv",
+      "scheme": "file",
+      "format": "csv",
+      "mediatype": "text/csv"
+    },
+    {
+      "name": "state_scalescore6_estimates",
+      "type": "table",
+      "title": "Individual state-level stigma scale score (6 item) estimates",
+      "description": "State-level stigma scale estimation and variances for the 6 stigma scale score",
+      "path": "data/processed/state-scalescore6-estimates.csv",
+      "scheme": "file",
+      "format": "csv",
+      "mediatype": "text/csv"
+    },
+    {
+      "name": "national_scalescore6_estimates",
+      "type": "table",
+      "title": "National stigma scale score (6 item) estimates",
+      "description": "National stigma scale estimation and variances for the 6 stigma scale score",
+      "path": "data/processed/national-scalescore6-estimates.csv",
+      "scheme": "file",
+      "format": "csv",
+      "mediatype": "text/csv"
+    },
+    {
+      "name": "state_scalescore6_estimates",
+      "type": "table",
+      "title": "Individual state-level stigma scale score (6 item) estimates",
+      "description": "State-level stigma scale estimation and variances for the 6 stigma scale score",
+      "path": "data/processed/state-scalescore6-estimates.csv",
+      "scheme": "file",
+      "format": "csv",
+      "mediatype": "text/csv"
+    }
+  ],
+  "readme": "Put the readme contents here?"
 }
