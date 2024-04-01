@@ -1,0 +1,5 @@
+outs:
+- md5: cac2e4ebf8fbfbab1ca5e214d16d2c3f
+  size: 191
+  hash: md5
+  path: national-scalescore6-estimates.csv
