@@ -1,0 +1,5 @@
+outs:
+- md5: 1595500f570aa3d8bd04447d25e62f46
+  size: 77887
+  hash: md5
+  path: strata-and-clusters.csv
