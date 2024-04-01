@@ -19,16 +19,16 @@ def get_national_estimates(df,ycol):
 
     estimator = TaylorEstimator("mean")
     estimator.estimate(
-        y=sub_df_1[col],
-        samp_weight=sub_df_1["weight2"],
-        stratum=sub_df_1["strata_fullsample"],
-        psu=sub_df_1["psu_fullsample"],
+        y=df[ycol],
+        samp_weight=df["weight2"],
+        stratum=df["strata_fullsample"],
+        psu=df["psu_fullsample"],
     )
     estimates = estimator.to_dataframe()
 
     estimates.insert(1,"_domain","")
     estimates.insert(0,"geo","nation")
-    estimates.insert(0,"var",col)
+    estimates.insert(0,"var",ycol)
 
     return estimates
 
@@ -39,8 +39,8 @@ def get_domain_estimates(df,ycol,domaincol,stratacol,psucol):
     estimator.estimate(
         y=df[ycol],
         samp_weight=df["weight2"],
-        stratum=sub_df_1[stratacol],
-        psu=sub_df_1[psucol],
+        stratum=df[stratacol],
+        psu=df[psucol],
         domain=df[domaincol]
     )
     return estimator.to_dataframe()
