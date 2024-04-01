@@ -27,21 +27,16 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import pyreadstat
+import frictionless
 # %% [markdown]
 # ### Data cleaning/pre-processing
-os.chdir(Path(__file__).parents[3])
 # %%
-# inputs
-STATE_ABBREVIATIONS = "data/state_abbrev_mappings.json"
-DATAPATH = "P:/3652/Common/HEAL/y3-task-c-collaborative-projects/jcoin-stigma/analyses/data/protocol2/"
-DATA_FILE = DATAPATH+"3645_JCOIN_HEAL Initiative 2021_NORC_Jan2022_1.sav"
-STRATA_FILE = DATAPATH+"VSTRAT_VPSU_Survey_2039_HEAL_MAIN_21_05_14.csv"
+package = frictionless.Package.from_descriptor("datapackage.json")
 
 # %%
 # import data and metadata (data dictionaries)
-df, meta = pyreadstat.read_sav(DATA_FILE,apply_value_formats=True)
-
-schema = ""
+datapath = package.get_resource("wave1-with-states").path
+df, meta = pyreadstat.read_sav(datapath,apply_value_formats=True)
 # %%
 
 # lower-case column names 
@@ -213,13 +208,13 @@ sub_df_1['expanded_10item_stigma'].fillna(sub_df_1['expanded_10item_stigma'].med
 # add df column with state 2 letter code
 # https://pythonfix.com/code/us-states-abbrev.py/
 # state name to two letter code dictionary
-us_state_to_abbrev = json.loads(Path(STATE_ABBREVIATIONS).read_text())
+us_state_to_abbrev = package.get_resource("state-abbreviations").read_data()
 state_cd = sub_df_1.state.replace(us_state_to_abbrev)
 sub_df_1.insert(6,"state_cd",state_cd,True)
 
 # %%
 # Add jcoin information
-jcoin_json = json.loads(Path("data/jcoin_states.json").read_text())
+jcoin_json = package.get_resource("jcoin-states").read_data()
 
 jcoin_df = (pd.DataFrame(jcoin_json)
     .assign(hub_types=lambda df:df["hub"]+"("+df["type"]+")")
@@ -298,7 +293,7 @@ sub_df_1_as_oversample_states = sub_df_1[sub_df_1["state_cd"].isin(states_with_o
 caseid_in_as_oversample_state = sub_df_1_as_oversample_states["caseid"]
 
 # %%
-strata_df = pd.read_csv(STRATA_FILE)
+strata_df = package.get_resource('strata-and-psu').to_pandas()
 strata_df.columns = strata_df.columns.str.lower()
 
 # get strata and cluster ids for survey respondents in oversampled states
@@ -357,7 +352,6 @@ sub_df_1 = (
     .join(oversample_strata_df)
     .assign(isin_state_with_oversample=lambda df:df.index.isin(caseid_in_as_oversample_state))
 )
-
 
 sub_df_1.to_csv("data/processed/protocol2_wave1_analytic.csv")
 
