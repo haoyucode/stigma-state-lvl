@@ -1,0 +1,5 @@
+outs:
+- md5: 7968dbf79743c85677b541c4a93d4ba6
+  size: 1779532
+  hash: md5
+  path: protocol2_wave1_analytic.csv
