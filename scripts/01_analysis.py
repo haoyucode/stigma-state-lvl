@@ -6,9 +6,8 @@ from pathlib import Path
 
 measure_list = [
     "stigma_scale_score",
-    "ss_6_past",
-    "ss_6_current",
-    "race_view_flag",
+
+    
     "partyid5_strong_d",
     "partyid5_strong_r",
 ]
@@ -23,7 +22,7 @@ national_scalescore6_estimates.to_csv(
     "data/processed/national-scalescore6-estimates.csv"
 )
 
-package.add_resource(
+package.set_resource(
     frictionless.Resource(
     name="national_scalescore6_estimates",
     title="National stigma scale score (6 item) estimates",
@@ -36,7 +35,7 @@ state_scalescore6_estimates = models.get_state_estimates(
     data, ycol="stigma_scale_score"
 )
 state_scalescore6_estimates.to_csv("data/processed/state-scalescore6-estimates.csv")
-package.add_resource(
+package.set_resource(
     frictionless.Resource(
         name="state_scalescore6_estimates",
         title="Individual state-level stigma scale score (6 item) estimates",
@@ -45,6 +44,28 @@ package.add_resource(
     )
 )
 
+# national
+# "ss_6_past",
+# "ss_6_current"
+
+# state
+# "ss_6_past",
+# "ss_6_current"
+
+
+# national
+# "race_view_flag",
+
+# state
+# "race_view_flag",
+
+# national
+# "partyid5_strong_d",
+# "partyid5_strong_r",
+
+# state
+#  "partyid5_strong_d",
+#  "partyid5_strong_r",
 
 # write new descriptors to package
 package.to_json("datapackage.json")
