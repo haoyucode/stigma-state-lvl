@@ -130,21 +130,8 @@ cobra_composite = {
     "description": "Composite score for factor 1 in Color-Blind Racial Attitudes Scale.",
     **standardsmappings.cobra,
 }
-ss_6_past_vars = ["ss_a_historywork", "ss_b_historymarry"]
 
 ss_6_past = [
-    {
-        "section": "Social stigma (6 question)",
-        "name": "ss_6_past",
-        "type": "number",
-        "description": (
-            "Attitude towards opioid stigma for **past** users using 2 past user questions in 6 question stigma scale."
-            "**Transforms**"
-            "\n"
-            f"The mean of  `{'`,`'.join(ss_6_past_vars)}`"
-        ),
-        "custom": {"derived": True},
-    },
     {
         "section": "Social stigma",
         "name": "ss_a_historywork",
@@ -160,13 +147,6 @@ ss_6_past = [
 
 ss_6_current = [
     {
-        "section": "Social stigma (6 question)",
-        "name": "ss_6_current",
-        "type": "number",
-        "description": "Attitude towards opioid stigma for **current** users using 2 past user questions in 6 question stigma scale.",
-        "custom": {"derived": True},
-    },
-    {
         "section": "Social stigma",
         "name": "ss_a_historywork",
         "title": "Person with past OUD: **working** closely",
@@ -179,13 +159,51 @@ ss_6_current = [
     {"name":"ss_e_dangerous"},
     {"name":"ss_f_trust"}
 ]
+ss_6_current_composite = {
+        "section": "Social stigma (6 question)",
+        "name": "ss_6_current",
+        "type": "number",
+        "description": "Attitude towards opioid stigma for **current** users using 2 past user questions in 6 question stigma scale.",
+        "custom": {"derived": True},
+    }
+ss_6_past_composite =  {
+        "section": "Social stigma (6 question)",
+        "name": "ss_6_past",
+        "type": "number",
+        "description": (
+            "Attitude towards opioid stigma for **past**" 
+            "users using 2 past user questions in 6 question stigma scale."
+        ),
+        "custom": {"derived": True},
+    }
+stigma6 = ss_6_current + ss_6_past
 
-ss_10_past = [
+ss_10_past = ss_6_past + [
     {"name":"ss_historysteal"},
     {"name":"ss_historyhighrisk"}       
 ]
 
-ss_10_current = [
+ss_10_current = ss_6_current + [
     {"name":"ss_currentsteal"},
     {"name":"ss_currenthighrisk"}       
 ]
+
+ss_10_current_composite = {
+        "section": "Social stigma (10 question)",
+        "name": "ss_10_current",
+        "type": "number",
+        "description": "Attitude towards opioid stigma for **current** users using all past user questions in 10 question stigma scale.",
+        "custom": {"derived": True},
+    }
+ss_10_past_composite =  {
+        "section": "Social stigma (10 question)",
+        "name": "ss_10_past",
+        "type": "number",
+        "description": (
+            "Attitude towards opioid stigma for **past**" 
+            "users using all past user questions in 10 question stigma scale."
+        ),
+        "custom": {"derived": True},
+    }
+
+stigma10 = ss_10_current + ss_10_past

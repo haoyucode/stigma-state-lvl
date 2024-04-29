@@ -17,13 +17,14 @@ import pyreadstat
 import frictionless as fl
 
 from stigma_state_lvl.data import mappings, metadata, transforms
-from stigma_state_lvl.data.metadata import fields
+from stigma_state_lvl.data.metadata import fields, standardsmappings
 
 # %% [markdown]
 # %%
 # import data and metadata (data dictionaries)
 # datapath = Path(__file__).parents[1]/"wave1.sav"
-datapath = "../data/raw/wave1.sav"
+os.chdir(Path(__file__).parents[1])
+datapath = "data/raw/wave1.sav"
 sourcedf, sourcemeta = pyreadstat.read_sav(datapath, apply_value_formats=True)
 source_variablelabels = {
     name.lower(): label for name, label in sourcemeta.column_names_to_labels.items()
@@ -32,24 +33,20 @@ source_variablelabels = {
 sourcedf.columns = sourcedf.columns.str.lower()
 
 # INITIATE TARGET SCHEMA AND DATAFRAME
-# TODO: change df to targetdf in all below code
-df = targetdf = sourcedf[["caseid"]].copy()
-
+targetdf = sourcedf[["caseid"]].copy()
 schema = fl.Schema(fields=[fl.Field.from_descriptor(metadata.fields.caseid)])
 
 # POPULATE TARGET SCHEMA AND DF
 for field in fields.demographic:
     field = fl.Field.from_descriptor(field)
     schema.add_field(field)
-    targetdf[field.name] = sourcedf[field.name]
-
-## 6 question
+## 6 question items
 for name, mapping in mappings.stigma6.items():
     _meta = {
         "name": name,
         "description": source_variablelabels[name],
         "enumLabels": mapping,
-        **metadata.stigma6,
+        **standardsmappings.stigma6,
     }
     data, meta = transforms.categorical_to_numeric(
         data=sourcedf[name], mapping=mapping, meta=_meta
@@ -57,15 +54,15 @@ for name, mapping in mappings.stigma6.items():
     targetdf[name] = data
     schema.add_field(fl.Field.from_descriptor(meta))
 
-## 10 question
+## 10 question items
 for name, mapping in mappings.stigma10.items():
     _meta = {
         "name": name,
         "description": source_variablelabels[name],
         "enumLabels": mapping,
-        **metadata.stigma10,
+        **standardsmappings.stigma10,
     }
-    data, meta = data.categorical_to_numeric(
+    data, meta = transforms.categorical_to_numeric(
         data=sourcedf[name], mapping=mapping, meta=_meta
     )
     targetdf[name] = data
@@ -74,68 +71,96 @@ for name, mapping in mappings.stigma10.items():
 # current and past usage
 
 ## 6 question
-for field in fields.ss_6_past:
-    data = sourcedf[field["name"]].copy() # TODO: change to numeric (right now, already calculated so not doing)
-    targetdf[meta["name"]] = data
-    schema.add_field(fl.Field.from_descriptor(field))
 
-meta = fl.Field.from_descriptor(fl.Field.from_descriptor(fields.derived_ss_6_past))
-meta.description += ("\n**Transforms**\n"
-            f"The mean of  `{'`,`'.join(ss_6_past_names)}`")
+ss_6_past_names = [field['name'] for field in fields.ss_6_past]
+meta = fl.Field.from_descriptor(fields.ss_6_past_composite)
+meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_6_past_names)}`"
 schema.add_field(meta)
-df["ss_6_past"] = df[ss_6_past_names].mean(axis=1)
+targetdf["ss_6_past"] = targetdf[ss_6_past_names].mean(axis=1)
 
-for field in fields.ss_6_current:
-    data = sourcedf[field["name"]].copy() # TODO: change to numeric (right now, already calculated so not doing)
-    targetdf[meta["name"]] = data
+meta = fl.Field.from_descriptor(fields.ss_6_current_composite)
+meta.description += (
+    "\n**Transforms**\n" f"The mean of  `{'`,`'.join([field['name'] for field in fields.ss_6_current])}`"
+)
+schema.add_field(meta)
+targetdf["ss_6_current"] = targetdf[[field["name"] for field in fields.ss_6_current]].mean(axis=1)
+
+# impute missing stigma scale score values as the median score
+# TODO: compute based on individual scores
+targetdf["stigma_scale_score"] = sourcedf["stigma_scale_score"].fillna(lambda s: s.median())
+schema.add_field(
+    fl.fields.NumberField(
+        name="stigma_scale_score",
+        title="6 question social stigma scale score",
+        description=source_variablelabels["stigma_scale_score"],
+    )
+)
+## 10 question
+for field in fields.ss_10_past:
+    data = sourcedf[
+        field["name"]
+    ].copy()  # TODO: change to numeric (right now, already calculated so not doing)
+    targetdf[field["name"]] = data
     schema.add_field(fl.Field.from_descriptor(field))
 
+ss_10_past_names = [field['name'] for field in fields.ss_10_past]
+meta = fl.Field.from_descriptor(fields.ss_10_past_composite)
+meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_10_past_names)}`"
+schema.add_field(meta)
+targetdf["ss_10_past"] = targetdf[ss_10_past_names].mean(axis=1)
 
-meta = fl.Field.from_descriptor(fields.derived_ss_6_current)
-meta.description += ("\n**Transforms**\n"
-            f"The mean of  `{'`,`'.join(ss_6_current_vars)}`")
-schema.add_field(fl.Field.from_descriptor(meta))
-df["ss_6_current"] = df[ss_6_current_vars].mean(axis=1)
+for field in fields.ss_10_current:
+    data = sourcedf[
+        field["name"]
+    ].copy()  # TODO: change to numeric (right now, already calculated so not doing)
+    targetdf[field["name"]] = data
+    schema.add_field(fl.Field.from_descriptor(field))
 
-## 10 question
-ss_10_past_names = [field["name"] for field in fields.ss_10_past + fields.ss_6_past]
-df["ss_10_past"] = df[ss_10_past_names].mean(axis=1)
-meta.description += ("\n**Transforms**\n"
-            f"The mean of  `{'`,`'.join(ss_10_past_names)}`")
-schema.add_field(fl.Field.from_descriptor(meta))
-df["ss_10_current"] = df[ss_10_past_names].mean(axis=1)
-
+ss_10_current_names = [field['name'] for field in fields.ss_10_current]
+meta = fl.Field.from_descriptor(fields.ss_10_current_composite)
+meta.description += (
+    "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_10_current_names)}`"
+)
+schema.add_field(meta)
+targetdf["ss_10_current"] = targetdf[ss_10_current_names].mean(axis=1)
+targetdf["expanded_10item_stigma"] = sourcedf["expanded_10item_stigma"].fillna(lambda s: s.median())
+schema.add_field(
+    fl.fields.NumberField(
+        name="expanded_10item_stigma",
+        title="10 question social stigma scale score",
+        description=source_variablelabels["expanded_10item_stigma"],
+    )
+)
 ## Cobra racial awareness
 
 for name, mapping in mappings.cobra.items():
 
-    data, meta = data.categorical_to_numeric(
-        data=sourcedf[name], mapping=mapping, meta=metadata.cobra
-    )
+    data, meta = transforms.categorical_to_numeric(
+        data=sourcedf[name], mapping=mapping, meta={"name":name,"description":source_variablelabels[name],
+            **standardsmappings.cobra})
     targetdf[name] = data
     schema.add_field(fl.Field.from_descriptor(meta))
 
 
-df["racial_privilege"] = df[cobramap.keys()].sum(axis=1)
-meta = fields.cobra_composite
-meta.description += ("\n**Transforms**\n"
-            f"The sum of  `{'`,`'.join(ss_10_past_names)}`")
-schema.add_field(fl.Field.from_descriptor(meta))
+targetdf["racial_privilege"] = targetdf[mappings.cobra.keys()].sum(axis=1)
+meta = fl.Field.from_descriptor(fields.cobra_composite)
+meta.description += "\n**Transforms**\n" f"The sum of  `{'`,`'.join(mappings.cobra.keys())}`"
+schema.add_field(meta)
 
 vars_of_interest = [
-    "stigma_scale_score",
-    "expanded_10item_stigma",
     "personaluse_ever",
     "familyuse_ever",
     "personalcrimjust_ever",
     "familycrimjust_ever",
 ]
-
+for name in vars_of_interest:
+    targetdf[name] = sourcedf[name].copy()
+    schema.add_field(fl.Field.from_descriptor({"name":name,"type":"string"}))
 
 # clean up some of the categoricals to be consistently coded
-df.familycrimjust_ever.replace({0: "No", 1: "Yes"}, inplace=True)
-df.familyuse_ever.replace({" No": "No"}, inplace=True)
-df.personalcrimjust_ever.replace(
+targetdf.familycrimjust_ever.replace({0: "No", 1: "Yes"}, inplace=True)
+targetdf.familyuse_ever.replace({" No": "No"}, inplace=True)
+targetdf.personalcrimjust_ever.replace(
     {
         "Yes, ever arrested or incarcerated": "Yes",
         "No, never arrested or incarcerated": "No",
@@ -148,33 +173,23 @@ df.personalcrimjust_ever.replace(
 
 # # impute missing stigma scale score vals with median, impute missing personaluse_ever with mode, "No"
 # replace missing values of personaluse_ever with mode value of 'No'
-df.personaluse_ever.fillna("No", inplace=True)
-df.familyuse_ever.fillna("No", inplace=True)
-df.personalcrimjust_ever.fillna("No", inplace=True)
-df.familycrimjust_ever.fillna("No", inplace=True)
-
-# impute missing stigma scale score values as the median score
-# TODO: compute based on individual scores
-df["stigma_scale_score"].fillna(df["stigma_scale_score"].median(), inplace=True)
-df["expanded_10item_stigma"].fillna(df["expanded_10item_stigma"].median(), inplace=True)
-
+targetdf.personaluse_ever.fillna("No", inplace=True)
+targetdf.familyuse_ever.fillna("No", inplace=True)
+targetdf.personalcrimjust_ever.fillna("No", inplace=True)
+targetdf.familycrimjust_ever.fillna("No", inplace=True)
 
 # %%
 # add df column with state 2 letter code
 # https://pythonfix.com/code/us-states-abbrev.py/
 # state name to two letter code dictionary
-for field in fields.jcoin_hub:
-    field = fl.Field.from_descriptor(field)
-    schema.add_field(field)
-    targetdf[field.name] = sourcedf[field.name]
 
-us_state_to_abbrev = package.get_resource("state-abbreviations").read_data()
-state_cd = df.state.replace(us_state_to_abbrev)
-df.insert(6, "state_cd", state_cd, True)
+us_state_to_abbrev = fl.Resource(path="data/state_abbrev_mappings.json").read_data()
+state_cd = sourcedf.state.replace(us_state_to_abbrev)
+targetdf.insert(6, "state_cd", state_cd, True)
 
 # %%
 # Add jcoin information
-jcoin_json = package.get_resource("jcoin-states").read_data()
+jcoin_json = fl.Resource(path="data/jcoin_states.json").read_data()
 
 jcoin_df = (
     pd.DataFrame(jcoin_json)
@@ -195,22 +210,20 @@ jcoin_df = (
 jcoin_df["is_jcoin_state"] = True
 
 # %%
-jcoin_df.head()
+targetdf = targetdf.merge(jcoin_df, on="state_cd", how="left")
+targetdf["jcoin_hub_types"].fillna("not JCOIN", inplace=True)
+targetdf["jcoin_hub_count"].fillna(0, inplace=True)
+targetdf["is_jcoin_state"].fillna(False, inplace=True)
+targetdf["is_jcoin_hub"] = np.where(targetdf["jcoin_hub_types"] == "not JCOIN", "No", "Yes")
 
-# %%
-df = df.merge(jcoin_df, on="state_cd", how="left")
-df["jcoin_hub_types"].fillna("not JCOIN", inplace=True)
-df["jcoin_hub_count"].fillna(0, inplace=True)
-df["is_jcoin_state"].fillna(False, inplace=True)
-df["is_jcoin_hub"] = np.where(df["jcoin_hub_types"] == "not JCOIN", "No", "Yes")
-
-
+for field in fields.jcoin_hub:
+    field = fl.Field.from_descriptor(field)
+    schema.add_field(field)
 # %%
 # join strata into dataset
-df = df.merge(df, on="caseid", how="left")
-
+targetdf["p_over"] = sourcedf["p_over"].copy() #TODO: make part of sample and weighting fields
 pop_counts_by_sampletypexstate = (
-    df.convert_dtypes()
+    targetdf.convert_dtypes()
     .assign(jcoin_hub_count=lambda df: df.jcoin_hub_count.astype(str))
     .groupby(["state_cd", "p_over"])["stigma_scale_score"]
     .count()
@@ -225,7 +238,7 @@ pop_counts_by_sampletypexstate = (
     .sort_values("total", ascending=False)
     .assign(
         jcoin_hub_count=lambda df: df.jcoin_hub_count.fillna(0).astype(int),
-        jcoin_flag=lambda df: df.jcoin_flag.fillna(0).astype(int),
+        jcoin_flag=lambda df: df.is_jcoin_state.fillna(0).astype(int),
         jcoin_hub_types=lambda df: (
             np.where(
                 df.jcoin_hub_types.isna() & df["AS oversample"] > 0,
@@ -244,17 +257,15 @@ pop_counts_by_sampletypexstate = (
 for field in fields.sampling + fields.weights:
     field = fl.Field.from_descriptor(field)
     schema.add_field(field)
-    targetdf[field.name] = sourcedf[field.name]
-
 
 states_with_oversample_df = pop_counts_by_sampletypexstate[
     pop_counts_by_sampletypexstate["AS oversample"] > 0
 ]
 states_with_oversample_list = states_with_oversample_df["state_cd"]
-df_as_oversample_states = df[df["state_cd"].isin(states_with_oversample_list)]
+df_as_oversample_states = targetdf[targetdf["state_cd"].isin(states_with_oversample_list)]
 # get caseids for survey respondents in oversampled states
 caseid_in_as_oversample_state = df_as_oversample_states["caseid"]
-strata_df = package.get_resource("strata-and-psu").to_pandas()
+strata_df = fl.Resource(path="data/raw/strata-and-psu.csv").to_pandas()
 strata_df.columns = strata_df.columns.str.lower()
 # get strata and cluster ids for survey respondents in oversampled states
 strata_df_in_as_oversample_state = strata_df[
@@ -312,7 +323,7 @@ fullsample_strata_df = strata_df.set_index("caseid")[
         "vpsu32_corrected": "psu_fullsample",
     }
 )
-oversample_strata_df = strata_df.set_index("caseid")[
+oversample_strata_df = strata_df_in_as_oversample_state.set_index("caseid")[
     ["vstrat32_corrected", "vpsu32_corrected"]
 ].rename(
     columns={
@@ -320,8 +331,8 @@ oversample_strata_df = strata_df.set_index("caseid")[
         "vpsu32_corrected": "psu_oversample",
     }
 )
-df = (
-    df.set_index("caseid")
+targetdf = (
+    targetdf.set_index("caseid")
     .join(fullsample_strata_df)
     .join(oversample_strata_df)
     .assign(
@@ -329,8 +340,10 @@ df = (
             caseid_in_as_oversample_state
         )
     )
+    .reset_index()
 )
 
-resource = fl.Resource(data=df.to_dict(orient="records"),schema=schema)
+resource = fl.Resource(data=targetdf.to_dict(orient="records"), schema=schema)
+resource.infer(stats=True)
 resource.schema.to_yaml("schemas/processed/protocol2_wave1_analytic.yaml")
 resource.write("data/processed/protocol2_wave1_analytic.csv")
