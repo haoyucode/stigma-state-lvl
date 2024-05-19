@@ -26,16 +26,14 @@ def categorical_to_numeric(data,meta,mapping,impute=True):
     categorytype = CategoricalDtype(ordered=True,categories=mapping.keys())
     categoricaldata = data.astype(categorytype)
 
-    meta["description"] += "\n\n"
+    meta["description"] += "\n"
     meta["description"] += "**Transform steps**"
-    meta["description"] += "\n\n"
+    meta["description"] += "\n"
 
     if impute:
         meta["description"] += f"- Imputed the mode (`{categoricaldata.mode()[0]}`)"
         categoricaldata.fillna(categoricaldata.mode(),inplace=True)
 
-
-    meta["description"] += "\n"
     meta["description"] += "- Replaced value labels with integer codes (see `enumLabels`)"
     meta["type"] = "integer"
     meta["enumLabels"] = {str(val):key for key,val in mapping.items()}
@@ -45,3 +43,18 @@ def categorical_to_numeric(data,meta,mapping,impute=True):
 
     return numericdata,meta
 
+def impute_mean(data,meta):
+    data = data.copy()
+    meta = dict(meta)
+    meta["description"] += "\n"
+    meta["description"] += "**Transform steps**"
+    meta["description"] += "\n"
+
+    if impute:
+        meta["description"] += f"- Imputed the mean (`{data.mean()[0]}`)"
+        data.fillna(data.mean(),inplace=True)
+
+    meta["description"] += "- Replaced value labels with integer codes (see `enumLabels`)"
+    meta["type"] = "number"
+
+    return data,meta

@@ -40,21 +40,8 @@ schema = fl.Schema(fields=[fl.Field.from_descriptor(metadata.fields.caseid)])
 for field in fields.demographic:
     field = fl.Field.from_descriptor(field)
     schema.add_field(field)
-## 6 question items
-for name, mapping in mappings.stigma6.items():
-    _meta = {
-        "name": name,
-        "description": source_variablelabels[name],
-        "enumLabels": mapping,
-        **standardsmappings.stigma6,
-    }
-    data, meta = transforms.categorical_to_numeric(
-        data=sourcedf[name], mapping=mapping, meta=_meta
-    )
-    targetdf[name] = data
-    schema.add_field(fl.Field.from_descriptor(meta))
 
-## 10 question items
+## 10 question items (includes 6 item questions as well)
 for name, mapping in mappings.stigma10.items():
     _meta = {
         "name": name,
@@ -76,53 +63,45 @@ ss_6_past_names = [field['name'] for field in fields.ss_6_past]
 meta = fl.Field.from_descriptor(fields.ss_6_past_composite)
 meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_6_past_names)}`"
 schema.add_field(meta)
-targetdf["ss_6_past"] = targetdf[ss_6_past_names].mean(axis=1)
+targetdf["ss_6_past"] = targetdf[ss_6_past_names].mean(axis=1).fillna(lambda s: s.median())
 
 meta = fl.Field.from_descriptor(fields.ss_6_current_composite)
 meta.description += (
     "\n**Transforms**\n" f"The mean of  `{'`,`'.join([field['name'] for field in fields.ss_6_current])}`"
 )
 schema.add_field(meta)
-targetdf["ss_6_current"] = targetdf[[field["name"] for field in fields.ss_6_current]].mean(axis=1)
+targetdf["ss_6_current"] = targetdf[[field["name"] for field in fields.ss_6_current]].mean(axis=1).fillna(lambda s: s.median())
 
 # impute missing stigma scale score values as the median score
 # TODO: compute based on individual scores
 targetdf["stigma_scale_score"] = sourcedf["stigma_scale_score"].fillna(lambda s: s.median())
-schema.add_field(
-    fl.fields.NumberField(
-        name="stigma_scale_score",
-        title="6 question social stigma scale score",
-        description=source_variablelabels["stigma_scale_score"],
-    )
+meta = fl.fields.NumberField(
+    name="stigma_scale_score",
+    title="6 question social stigma scale score",
+    description=source_variablelabels["stigma_scale_score"],
 )
-## 10 question
-for field in fields.ss_10_past:
-    data = sourcedf[
-        field["name"]
-    ].copy()  # TODO: change to numeric (right now, already calculated so not doing)
-    targetdf[field["name"]] = data
-    schema.add_field(fl.Field.from_descriptor(field))
+schema.add_field(meta)
 
 ss_10_past_names = [field['name'] for field in fields.ss_10_past]
 meta = fl.Field.from_descriptor(fields.ss_10_past_composite)
 meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_10_past_names)}`"
+meta.description += "\n- Median used for imputation"
 schema.add_field(meta)
-targetdf["ss_10_past"] = targetdf[ss_10_past_names].mean(axis=1)
+targetdf["ss_10_past"] = targetdf[ss_10_past_names].mean(axis=1).fillna(lambda s: s.median())
 
-for field in fields.ss_10_current:
-    data = sourcedf[
-        field["name"]
-    ].copy()  # TODO: change to numeric (right now, already calculated so not doing)
-    targetdf[field["name"]] = data
-    schema.add_field(fl.Field.from_descriptor(field))
 
 ss_10_current_names = [field['name'] for field in fields.ss_10_current]
 meta = fl.Field.from_descriptor(fields.ss_10_current_composite)
 meta.description += (
-    "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_10_current_names)}`"
+    "\n**Transforms**\n" f"- The mean of  `{'`,`'.join(ss_10_current_names)}`"
+    "\n"
+    "- Imputation used with median"
 )
 schema.add_field(meta)
-targetdf["ss_10_current"] = targetdf[ss_10_current_names].mean(axis=1)
+targetdf["ss_10_current"] = targetdf[ss_10_current_names].mean(axis=1).fillna(lambda s: s.median())
+
+
+
 targetdf["expanded_10item_stigma"] = sourcedf["expanded_10item_stigma"].fillna(lambda s: s.median())
 schema.add_field(
     fl.fields.NumberField(
@@ -142,9 +121,9 @@ for name, mapping in mappings.cobra.items():
     schema.add_field(fl.Field.from_descriptor(meta))
 
 
-targetdf["racial_privilege"] = targetdf[mappings.cobra.keys()].sum(axis=1)
+targetdf["racial_privilege"] = targetdf[mappings.cobra.keys()].mean(axis=1).fillna(lambda s: s.median())
 meta = fl.Field.from_descriptor(fields.cobra_composite)
-meta.description += "\n**Transforms**\n" f"The sum of  `{'`,`'.join(mappings.cobra.keys())}`"
+meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(mappings.cobra.keys())}`"
 schema.add_field(meta)
 
 vars_of_interest = [
@@ -344,6 +323,6 @@ targetdf = (
 )
 
 resource = fl.Resource(data=targetdf.to_dict(orient="records"), schema=schema)
-resource.infer(stats=True)
+resource.validate()
 resource.schema.to_yaml("schemas/processed/protocol2_wave1_analytic.yaml")
 resource.write("data/processed/protocol2_wave1_analytic.csv")

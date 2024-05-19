@@ -129,6 +129,7 @@ cobra_composite = {
     "title": "Unawareness of Racial Privilege ",
     "description": "Composite score for factor 1 in Color-Blind Racial Attitudes Scale.",
     **standardsmappings.cobra,
+    "custom":{"derived":True}
 }
 
 ss_6_past = [

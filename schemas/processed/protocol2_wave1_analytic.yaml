@@ -39,13 +39,10 @@ fields:
       use disorder start working closely with me on a job.] Do you disagree or agree
       with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -77,13 +74,10 @@ fields:
       use disorder marry into my close or immediate family.] Do you disagree or agree
       with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -115,13 +109,10 @@ fields:
       start working closely with me on a job.] Do you disagree or agree with the following
       statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Neither disagree nor agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Neither disagree nor agree`)- Replaced value labels with
+      integer codes (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -153,13 +144,10 @@ fields:
       disorder marry into my close or immediate family.] Do you disagree or agree
       with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Strongly disagree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Strongly disagree`)- Replaced value labels with integer
+      codes (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -190,13 +178,10 @@ fields:
     description: '[People with a current opioid use disorder are more dangerous than
       the general population.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -227,239 +212,10 @@ fields:
     description: '[A person who currently has an opioid use disorder cannot be trusted.]
       Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
-    constraints:
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-    enumLabels:
-      '1': Strongly disagree
-      '2': Somewhat disagree
-      '3': Neither disagree nor agree
-      '4': Somewhat agree
-      '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_a_historywork
-    type: integer
-    description: '[I would be willing to have a person with a past history of opioid
-      use disorder start working closely with me on a job.] Do you disagree or agree
-      with the following statements?
-
-
-      **Transform steps**
-
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
-    constraints:
-      enum:
-        - 5
-        - 4
-        - 3
-        - 2
-        - 1
-    enumLabels:
-      '5': Strongly disagree
-      '4': Somewhat disagree
-      '3': Neither disagree nor agree
-      '2': Somewhat agree
-      '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_b_historymarry
-    type: integer
-    description: '[I would be comfortable having a person with a past history of opioid
-      use disorder marry into my close or immediate family.] Do you disagree or agree
-      with the following statements?
-
-
-      **Transform steps**
-
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
-    constraints:
-      enum:
-        - 5
-        - 4
-        - 3
-        - 2
-        - 1
-    enumLabels:
-      '5': Strongly disagree
-      '4': Somewhat disagree
-      '3': Neither disagree nor agree
-      '2': Somewhat agree
-      '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_c_currentwork
-    type: integer
-    description: '[I would be willing to have a person with a current opioid use disorder
-      start working closely with me on a job.] Do you disagree or agree with the following
-      statements?
-
-
-      **Transform steps**
-
-
-      - Imputed the mode (`Neither disagree nor agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
-    constraints:
-      enum:
-        - 5
-        - 4
-        - 3
-        - 2
-        - 1
-    enumLabels:
-      '5': Strongly disagree
-      '4': Somewhat disagree
-      '3': Neither disagree nor agree
-      '2': Somewhat agree
-      '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_d_currentmarry
-    type: integer
-    description: '[I would be comfortable having a person with a current opioid use
-      disorder marry into my close or immediate family.] Do you disagree or agree
-      with the following statements?
-
-
-      **Transform steps**
-
-
-      - Imputed the mode (`Strongly disagree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
-    constraints:
-      enum:
-        - 5
-        - 4
-        - 3
-        - 2
-        - 1
-    enumLabels:
-      '5': Strongly disagree
-      '4': Somewhat disagree
-      '3': Neither disagree nor agree
-      '2': Somewhat agree
-      '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_e_dangerous
-    type: integer
-    description: '[People with a current opioid use disorder are more dangerous than
-      the general population.] Do you disagree or agree with the following statements?
-
-
-      **Transform steps**
-
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
-    constraints:
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-    enumLabels:
-      '1': Strongly disagree
-      '2': Somewhat disagree
-      '3': Neither disagree nor agree
-      '4': Somewhat agree
-      '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_f_trust
-    type: integer
-    description: '[A person who currently has an opioid use disorder cannot be trusted.]
-      Do you disagree or agree with the following statements?
-
-
-      **Transform steps**
-
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -491,13 +247,10 @@ fields:
       willing to steal money or valuable items in order to get drugs.] Do you disagree
       or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Neither disagree nor agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Neither disagree nor agree`)- Replaced value labels with
+      integer codes (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -529,13 +282,10 @@ fields:
       to experience personal problems that would make them a high-risk employee in
       my workplace.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Neither disagree nor agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Neither disagree nor agree`)- Replaced value labels with
+      integer codes (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -567,13 +317,10 @@ fields:
       to steal money or valuable items in order to get drugs.] Do you disagree or
       agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -605,13 +352,10 @@ fields:
       experience personal problems that would make them a high-risk employee in my
       workplace.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -662,18 +406,6 @@ fields:
   - name: stigma_scale_score
     type: number
     title: 6 question social stigma scale score
-  - name: ss_a_historywork
-    type: string
-    title: Person with past OUD **work** closely
-    section: Social stigma
-  - name: ss_b_historymarry
-    type: string
-    title: Person with past OUD **marry** into family
-    section: Social stigma
-  - name: ss_historysteal
-    type: string
-  - name: ss_historyhighrisk
-    type: string
   - name: ss_10_past
     type: number
     description: 'Attitude towards opioid stigma for **past**users using all past
@@ -681,26 +413,12 @@ fields:
 
       **Transforms**
 
-      The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_historysteal`,`ss_historyhighrisk`'
+      The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_historysteal`,`ss_historyhighrisk`
+
+      - Median used for imputation'
     section: Social stigma (10 question)
     custom:
       derived: true
-  - name: ss_a_historywork
-    type: string
-    title: 'Person with past OUD: **working** closely'
-    section: Social stigma
-  - name: ss_b_historymarry
-    type: string
-    title: 'Person with past OUD: **marrying** into family'
-    section: Social stigma
-  - name: ss_e_dangerous
-    type: string
-  - name: ss_f_trust
-    type: string
-  - name: ss_currentsteal
-    type: string
-  - name: ss_currenthighrisk
-    type: string
   - name: ss_10_current
     type: number
     description: 'Attitude towards opioid stigma for **current** users using all past
@@ -708,7 +426,9 @@ fields:
 
       **Transforms**
 
-      The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_e_dangerous`,`ss_f_trust`,`ss_currentsteal`,`ss_currenthighrisk`'
+      - The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_e_dangerous`,`ss_f_trust`,`ss_currentsteal`,`ss_currenthighrisk`
+
+      - Imputation used with median'
     section: Social stigma (10 question)
     custom:
       derived: true
@@ -720,13 +440,10 @@ fields:
     description: '[Race is very important in determining who is successful and who
       is not.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Strongly disagree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Strongly disagree`)- Replaced value labels with integer
+      codes (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -760,13 +477,10 @@ fields:
     description: '[Race plays an important role in who gets sent to prison.] Do you
       disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -801,13 +515,10 @@ fields:
       type of health care or day care) that people receive in the U.S.] Do you disagree
       or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -842,13 +553,10 @@ fields:
       because of the color of their skin.] Do you disagree or agree with the following
       statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Somewhat agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -882,13 +590,10 @@ fields:
     description: '[Everyone who works hard, no matter what race they are, has an equal
       chance to become rich.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Strongly agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Strongly agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -922,13 +627,10 @@ fields:
     description: '[White people are more to blame for racial discrimination than racial
       and ethnic minorities.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Strongly disagree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Strongly disagree`)- Replaced value labels with integer
+      codes (see `enumLabels`)'
     constraints:
       enum:
         - 5
@@ -962,13 +664,10 @@ fields:
     description: '[White people in the U.S. have certain advantages because of the
       color of their skin.] Do you disagree or agree with the following statements?
 
-
       **Transform steps**
 
-
-      - Imputed the mode (`Strongly agree`)
-
-      - Replaced value labels with integer codes (see `enumLabels`)'
+      - Imputed the mode (`Strongly agree`)- Replaced value labels with integer codes
+      (see `enumLabels`)'
     constraints:
       enum:
         - 1
@@ -1004,7 +703,7 @@ fields:
 
       **Transforms**
 
-      The sum of  `race_successful`,`race_prison`,`race_socservices`,`race_minadvantage`,`race_rich`,`race_whiteblame`,`race_whiteadvantage`'
+      The mean of  `race_successful`,`race_prison`,`race_socservices`,`race_minadvantage`,`race_rich`,`race_whiteblame`,`race_whiteadvantage`'
     section: 'Color-Blind Racial Attitudes: Racial Privilege'
     standardsMappings:
       - instrument:
@@ -1020,6 +719,8 @@ fields:
           url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
         item:
           title: 'Item in Factor 1: Unawareness of Racial Privilege'
+    custom:
+      derived: true
   - name: personaluse_ever
     type: string
   - name: familyuse_ever
