@@ -127,9 +127,9 @@ for name, mapping in mappings.cobra.items():
     schema.add_field(fl.Field.from_descriptor(meta))
 
 
-targetdf["racial_privilege"] = targetdf[mappings.cobra.keys()].mean(axis=1).fillna(lambda s: s.median())
+targetdf["racial_privilege"] = targetdf[mappings.cobra.keys()].sum(axis=1)
 meta = fl.Field.from_descriptor(fields.cobra_composite)
-meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(mappings.cobra.keys())}`"
+meta.description += "\n**Transforms**\n" f"The sum (composite) of  `{'`,`'.join(mappings.cobra.keys())}`"
 schema.add_field(meta)
 
 vars_of_interest = [
@@ -173,23 +173,18 @@ state_cd = sourcedf.state.replace(us_state_to_abbrev)
 targetdf.insert(6, "state_cd", state_cd, True)
 
 # %%
-# Add jcoin information
+##### Add jcoin information ####
 jcoin_json = fl.Resource(path="data/jcoin_states.json").read_data()
 
 jcoin_df = (
     pd.DataFrame(jcoin_json)
-    .assign(hub_types=lambda df: df["hub"] + "(" + df["type"] + ")")
-    .groupby("states")
+    .assign(jcoin_hub_types=lambda df: df["hub"] + "(" + df["type"] + ")")
+    .groupby("state")
     # make a list of the name and type of hub/study and how many hubs are in that state
-    .agg({"hub_types": lambda s: ",".join(s), "hub": "count"})
+    .agg({"jcoin_hub_types": lambda s: ",".join(s), "hub": "count"})
+    .rename(columns={"hub":"jcoin_hub_count","state":"state_cd"})
     .reset_index()
-    .rename(
-        columns={
-            "states": "state_cd",
-            "hub": "jcoin_hub_count",
-            "hub_types": "jcoin_hub_types",
-        }
-    )
+    [["state_cd","jcoin_hub_types"]] # NOTE: these are the only vars going to be added
 )
 
 jcoin_df["is_jcoin_state"] = True
@@ -197,9 +192,9 @@ jcoin_df["is_jcoin_state"] = True
 # %%
 targetdf = targetdf.merge(jcoin_df, on="state_cd", how="left")
 targetdf["jcoin_hub_types"].fillna("not JCOIN", inplace=True)
-targetdf["jcoin_hub_count"].fillna(0, inplace=True)
+# targetdf["jcoin_hub_count"].fillna(0, inplace=True)
 targetdf["is_jcoin_state"].fillna(False, inplace=True)
-targetdf["is_jcoin_hub"] = np.where(targetdf["jcoin_hub_types"] == "not JCOIN", "No", "Yes")
+# targetdf["is_jcoin_hub"] = np.where(targetdf["jcoin_hub_types"] == "not JCOIN", "No", "Yes")
 
 for field in fields.jcoin_hub:
     field = fl.Field.from_descriptor(field)
@@ -239,9 +234,6 @@ pop_counts_by_sampletypexstate = (
 
 # strata/psus
 
-for field in fields.sampling + fields.weights:
-    field = fl.Field.from_descriptor(field)
-    schema.add_field(field)
 
 states_with_oversample_df = pop_counts_by_sampletypexstate[
     pop_counts_by_sampletypexstate["AS oversample"] > 0
@@ -257,45 +249,8 @@ strata_df_in_as_oversample_state = strata_df[
     strata_df["caseid"].isin(caseid_in_as_oversample_state)
 ]
 # collapse strata containing only 1 PSU
-onepsu = (
-    strata_df[["vstrat32", "vpsu32"]]
-    .drop_duplicates()
-    .groupby("vstrat32")
-    .count()
-    .squeeze()
-    .loc[lambda s: s == 1]
-    .index
-)
-strata_df["vstrat32_corrected"] = strata_df["vstrat32"].where(
-    cond=lambda s: ~s.isin(onepsu), other=-1
-)
-# rename PSUs so no duplicates
-strata_df["vpsu32_corrected"] = strata_df.groupby(
-    ["vstrat32_corrected", "vpsu32"]
-).ngroup()
-
-# ---------------------------------------------------
-
-# collapse strata containing only 1 PSU
-onepsu_in_as_oversample_state = (
-    strata_df_in_as_oversample_state[["vstrat32", "vpsu32"]]
-    .drop_duplicates()
-    .groupby("vstrat32")
-    .count()
-    .squeeze()
-    .loc[lambda s: s == 1]
-    .index
-)
-strata_df_in_as_oversample_state["vstrat32_corrected"] = (
-    strata_df_in_as_oversample_state["vstrat32"].where(
-        cond=lambda s: ~s.isin(onepsu_in_as_oversample_state), other=-1
-    )
-)
-# rename PSUs so no duplicates
-strata_df_in_as_oversample_state["vpsu32_corrected"] = (
-    strata_df_in_as_oversample_state.groupby(["vstrat32_corrected", "vpsu32"]).ngroup()
-)
-
+strata_df = transforms.reassign_psu_and_strata(strata_df)
+strata_df_in_as_oversample_state = transforms.reassign_psu_and_strata(strata_df_in_as_oversample_state)
 
 # %%
 # join strata into dataset
@@ -328,13 +283,20 @@ targetdf = (
     .reset_index()
 )
 
-## weights
+for field in fields.sampling + fields.weights:
 
-for field in fields.weights:
-    targetdf[field["name"]] = sourcedf[field["name"]]
-
+    # Add source variable if not already in dataset (ie the new strata/psu variables added from above)
+    if not field["name"] in targetdf:
+        targetdf[field["name"]] = sourcedf[field["name"]]
+    # add all metadata to schema
+    field = fl.Field.from_descriptor(field)
+    schema.add_field(field)
 
 resource = fl.Resource(data=targetdf.to_dict(orient="records"), schema=schema)
-resource.validate()
+
+# make sure the new target dataset aligns with the schema (ie the expected datatypes etc)
+report = resource.validate()
+if not report.valid:
+    raise Exception("Analytic dataset not valid")
 resource.schema.to_yaml("schemas/processed/protocol2_wave1_analytic.yaml")
 resource.write("data/processed/protocol2_wave1_analytic.csv")

@@ -58,3 +58,32 @@ def impute_mean(data,meta):
     meta["type"] = "number"
 
     return data,meta
+
+
+
+def reassign_psu_and_strata(strata_df):
+    """ 
+    reassigns names to psu and strata groupings
+    such that it (1) collapses strata containing
+    only one PSU and (2) renames PSUs so no psu dupcliate
+    names (which can happen for psus in different strata -- eg PSU =1 in strta=5 and psu = 1 in strata = 7)
+    
+    """ 
+    # collapse strata containing only 1 PSU
+    onepsu = (
+        strata_df[["vstrat32", "vpsu32"]]
+        .drop_duplicates()
+        .groupby("vstrat32")
+        .count()
+        .squeeze()
+        .loc[lambda s: s == 1]
+        .index
+    )
+    strata_df["vstrat32_corrected"] = strata_df["vstrat32"].where(
+        cond=lambda s: ~s.isin(onepsu), other=-1
+    )
+    # rename PSUs so no duplicates
+    strata_df["vpsu32_corrected"] = strata_df.groupby(
+        ["vstrat32_corrected", "vpsu32"]
+    ).ngroup()
+    return strata_df
