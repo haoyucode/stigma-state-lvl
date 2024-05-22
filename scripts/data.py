@@ -179,12 +179,11 @@ jcoin_json = fl.Resource(path="data/jcoin_states.json").read_data()
 jcoin_df = (
     pd.DataFrame(jcoin_json)
     .assign(jcoin_hub_types=lambda df: df["hub"] + "(" + df["type"] + ")")
-    .groupby("state")
+    .groupby("states")
     # make a list of the name and type of hub/study and how many hubs are in that state
     .agg({"jcoin_hub_types": lambda s: ",".join(s), "hub": "count"})
-    .rename(columns={"hub":"jcoin_hub_count","state":"state_cd"})
     .reset_index()
-    [["state_cd","jcoin_hub_types"]] # NOTE: these are the only vars going to be added
+    .rename(columns={"hub":"jcoin_hub_count","states":"state_cd"})
 )
 
 jcoin_df["is_jcoin_state"] = True
@@ -192,9 +191,9 @@ jcoin_df["is_jcoin_state"] = True
 # %%
 targetdf = targetdf.merge(jcoin_df, on="state_cd", how="left")
 targetdf["jcoin_hub_types"].fillna("not JCOIN", inplace=True)
-# targetdf["jcoin_hub_count"].fillna(0, inplace=True)
+targetdf["jcoin_hub_count"].fillna(0, inplace=True)
 targetdf["is_jcoin_state"].fillna(False, inplace=True)
-# targetdf["is_jcoin_hub"] = np.where(targetdf["jcoin_hub_types"] == "not JCOIN", "No", "Yes")
+targetdf["is_jcoin_hub"] = np.where(targetdf["jcoin_hub_types"] == "not JCOIN", "No", "Yes")
 
 for field in fields.jcoin_hub:
     field = fl.Field.from_descriptor(field)
@@ -292,7 +291,11 @@ for field in fields.sampling + fields.weights:
     field = fl.Field.from_descriptor(field)
     schema.add_field(field)
 
-resource = fl.Resource(data=targetdf.to_dict(orient="records"), schema=schema)
+for name in schema.field_names:
+    if not name in targetdf:
+        targetdf[name] = sourcedf[name]
+
+resource = fl.Resource(data=targetdf.fillna("")[schema.field_names].to_dict(orient="records"), schema=schema)
 
 # make sure the new target dataset aligns with the schema (ie the expected datatypes etc)
 report = resource.validate()
