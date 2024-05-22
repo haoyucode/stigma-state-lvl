@@ -52,6 +52,8 @@ for name, mapping in mappings.stigma10.items():
     data, meta = transforms.categorical_to_numeric(
         data=sourcedf[name], mapping=mapping, meta=_meta
     )
+    meta["description"] += "**Imputation**: Most frequent value (mode)"
+    data.fillna(data.mode()[0],inplace=True)
     targetdf[name] = data
     schema.add_field(fl.Field.from_descriptor(meta))
 
@@ -63,8 +65,10 @@ ss_6_past_names = [field['name'] for field in fields.ss_6_past]
 meta = fl.Field.from_descriptor(fields.ss_6_past_composite)
 meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_6_past_names)}`"
 schema.add_field(meta)
-targetdf["ss_6_past"] = targetdf[ss_6_past_names].mean(axis=1).fillna(lambda s: s.median())
-
+targetdf["ss_6_past"] = (
+    targetdf[ss_6_past_names]
+    .mean(axis=1)
+)
 meta = fl.Field.from_descriptor(fields.ss_6_current_composite)
 meta.description += (
     "\n**Transforms**\n" f"The mean of  `{'`,`'.join([field['name'] for field in fields.ss_6_current])}`"
@@ -117,6 +121,8 @@ for name, mapping in mappings.cobra.items():
     data, meta = transforms.categorical_to_numeric(
         data=sourcedf[name], mapping=mapping, meta={"name":name,"description":source_variablelabels[name],
             **standardsmappings.cobra})
+    meta["description"] += "**Imputation**: Most frequent value (mode)"
+    data.fillna(data.mode()[0],inplace=True)
     targetdf[name] = data
     schema.add_field(fl.Field.from_descriptor(meta))
 
@@ -321,6 +327,12 @@ targetdf = (
     )
     .reset_index()
 )
+
+## weights
+
+for field in fields.weights:
+    targetdf[field["name"]] = sourcedf[field["name"]]
+
 
 resource = fl.Resource(data=targetdf.to_dict(orient="records"), schema=schema)
 resource.validate()
