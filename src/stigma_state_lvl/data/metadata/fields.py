@@ -72,7 +72,7 @@ demographic = [
 
 
 jcoin_hub = [
-    {"name": "jcoin_hub_count", "description": "Number of hubs in a particular state"},
+    {"name": "jcoin_hub_count", "type":"integer","description": "Number of hubs in a particular state"},
     {
         "name": "jcoin_hub_types",
         "description": "List of hubs with the type of study in parentheses OR not jcoin for this particular state",
