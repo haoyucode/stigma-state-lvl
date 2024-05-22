@@ -15,14 +15,14 @@ from pathlib import Path
 import pandas as pd
 from samplics.estimation import TaylorEstimator
 
-def get_national_estimates(df,ycol): 
+def get_national_estimates(df,ycol,stratacol="strata_fullsample",psucol="psu_fullsample"): 
 
     estimator = TaylorEstimator("mean")
     estimator.estimate(
         y=df[ycol],
         samp_weight=df["weight2"],
-        stratum=df["strata_fullsample"],
-        psu=df["psu_fullsample"],
+        stratum=df[stratacol].astype(int),
+        psu=df[psucol].astype(int),
     )
     estimates = estimator.to_dataframe()
 
@@ -39,8 +39,8 @@ def get_domain_estimates(df,ycol,domaincol,stratacol,psucol):
     estimator.estimate(
         y=df[ycol],
         samp_weight=df["weight2"],
-        stratum=df[stratacol],
-        psu=df[psucol],
+        stratum=df[stratacol].astype(int),
+        psu=df[psucol].astype(int),
         domain=df[domaincol]
     )
     return estimator.to_dataframe()
