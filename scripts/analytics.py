@@ -16,8 +16,8 @@ field_names = [
     "ss_10_past",
     "ss_10_current",
     "racial_privilege",
-    'expanded_10item_stigma',
-    'stigma_scale_score'
+    # 'expanded_10item_stigma',
+    # 'stigma_scale_score'
 
 ]
 for name in field_names:
