@@ -72,7 +72,11 @@ demographic = [
 
 
 jcoin_hub = [
-    {"name": "jcoin_hub_count", "type":"integer","description": "Number of hubs in a particular state"},
+    {
+        "name": "jcoin_hub_count",
+        "type": "integer",
+        "description": "Number of hubs in a particular state",
+    },
     {
         "name": "jcoin_hub_types",
         "description": "List of hubs with the type of study in parentheses OR not jcoin for this particular state",
@@ -129,7 +133,7 @@ cobra_composite = {
     "title": "Unawareness of Racial Privilege ",
     "description": "Composite score for factor 1 in Color-Blind Racial Attitudes Scale.",
     **standardsmappings.cobra,
-    "custom":{"derived":True}
+    "custom": {"derived": True},
 }
 
 ss_6_past = [
@@ -145,7 +149,6 @@ ss_6_past = [
     },
 ]
 
-
 ss_6_current = [
     {
         "section": "Social stigma",
@@ -157,54 +160,99 @@ ss_6_current = [
         "name": "ss_b_historymarry",
         "title": "Person with past OUD: **marrying** into family",
     },
-    {"name":"ss_e_dangerous"},
-    {"name":"ss_f_trust"}
+    {"name": "ss_e_dangerous"},
+    {"name": "ss_f_trust"},
 ]
 ss_6_current_composite = {
-        "section": "Social stigma (6 question)",
-        "name": "ss_6_current",
-        "type": "number",
-        "description": "Attitude towards opioid stigma for **current** users using 2 past user questions in 6 question stigma scale.",
-        "custom": {"derived": True},
-    }
-ss_6_past_composite =  {
-        "section": "Social stigma (6 question)",
-        "name": "ss_6_past",
-        "type": "number",
-        "description": (
-            "Attitude towards opioid stigma for **past**" 
-            "users using 2 past user questions in 6 question stigma scale."
-        ),
-        "custom": {"derived": True},
-    }
-stigma6 = ss_6_current + ss_6_past
-
-ss_10_past = ss_6_past + [
-    {"name":"ss_historysteal"},
-    {"name":"ss_historyhighrisk"}       
-]
+    "section": "Social stigma (6 question)",
+    "name": "ss_6_current",
+    "type": "number",
+    "description": "Attitude towards opioid stigma for **current** users using 2 past user questions in 6 question stigma scale.",
+    "custom": {"derived": True},
+}
+ss_6_past_composite = {
+    "section": "Social stigma (6 question)",
+    "name": "ss_6_past",
+    "type": "number",
+    "description": (
+        "Attitude towards opioid stigma for **past**"
+        "users using 2 past user questions in 6 question stigma scale."
+    ),
+    "custom": {"derived": True},
+}
+ss_6_composite = {"name":"stigma_6item_composite",
+    "title":"6 question social stigma scale score",
+    "description":"Composite score (derived from 6 questions) on attitude towards opioid stigma users",
+}
+ss_10_past = ss_6_past + [{"name": "ss_historysteal"}, {"name": "ss_historyhighrisk"}]
 
 ss_10_current = ss_6_current + [
-    {"name":"ss_currentsteal"},
-    {"name":"ss_currenthighrisk"}       
+    {"name": "ss_currentsteal"},
+    {"name": "ss_currenthighrisk"},
 ]
 
 ss_10_current_composite = {
-        "section": "Social stigma (10 question)",
-        "name": "ss_10_current",
-        "type": "number",
-        "description": "Attitude towards opioid stigma for **current** users using all past user questions in 10 question stigma scale.",
-        "custom": {"derived": True},
-    }
-ss_10_past_composite =  {
-        "section": "Social stigma (10 question)",
-        "name": "ss_10_past",
-        "type": "number",
-        "description": (
-            "Attitude towards opioid stigma for **past**" 
-            "users using all past user questions in 10 question stigma scale."
-        ),
-        "custom": {"derived": True},
-    }
+    "section": "Social stigma (10 question)",
+    "name": "ss_10_current",
+    "type": "number",
+    "description": "Attitude towards opioid stigma for **current** users using all past user questions in 10 question stigma scale.",
+    "custom": {"derived": True},
+}
+ss_10_past_composite = {
+    "section": "Social stigma (10 question)",
+    "name": "ss_10_past",
+    "type": "number",
+    "description": (
+        "Attitude towards opioid stigma for **past**"
+        "users using all past user questions in 10 question stigma scale."
+    ),
+    "custom": {"derived": True},
+}
 
-stigma10 = ss_10_current + ss_10_past
+ss_10_composite = {
+        "section":"Social stigma (10 question)",
+        "name":"stigma_10item",
+        "title":"10 question social stigma scale score",
+        "type":"number",
+        "description":"Composite score (derived from 10 questions) on attitude towards opioid stigma users"
+}
+
+political = [
+    {   "section":"Political Party",
+        "name":"party_affiliation",
+        "title":"Political Party Affiliation (Democrat, Republican, Independent)",
+        "description":"Do you consider yourself a Democrat, a Republican, an Independent or none of these?",
+        "type":"string",
+        "custom":{"jcoin:original_name":"pid1"}
+    },
+    {
+        "section":"Political Party",
+        "name": "strong_democrat",
+        "title": "Strong Democrat",
+        "description": "Do you consider yourself a strong or not so strong Democrat?",
+        "type": "string",
+        "custom": {"jcoin:original_name": "pida"},
+    },
+    {
+        "section":"Political Party",
+        "name": "strong_republican",
+        "title": "String Republican",
+        "description": "Do you consider yourself a strong or not so strong Republican?",
+        "type": "string",
+        "custom": {"jcoin:original_name": "pidb"},
+    },
+    {
+        "section":"Political Party",
+        "name": "lean_demo_or_repub",
+        "title":"Lean Democrat or Republican",
+        "type": "string",
+        "custom": {"jcoin:original_name": "pidi"},
+    }
+]
+political_strength = {  
+    "section":"Political Party",
+    "name":"party_strength",
+    "title":"Political Party Strength of Affiliation",
+    "type":"string",
+    "custom":{"jcoin:original_name":"partyid7"}
+}

@@ -41,6 +41,34 @@ for field in fields.demographic:
     field = fl.Field.from_descriptor(field)
     schema.add_field(field)
 
+
+# political questions
+for field in fields.political:
+    targetdf[field["name"]] = sourcedf[field["custom"]["jcoin:original_name"]]
+
+def determine_political_strength(row):
+    """ assign values based on values in other political party
+    fields
+    """ 
+    if row.lean_demo_or_repub == "Lean Democrat":
+        return "Lean Democrat"
+    elif row.lean_demo_or_repub == "Lean Republican":
+        return "Lean Republican"
+    elif row.strong_republican == "Not so strong Republican":
+        return "Not so strong Republican"
+    elif row.strong_republican == "Strong Republican":
+        return "Strong Republican"
+    elif row.strong_democrat == "Not so strong Democrat":
+        return "Not so strong Democrat"
+    elif row.strong_democrat == "Strong Democrat":
+        return "Strong Democrat"
+    elif row.party_affiliation.isin(["Independent","None of these"]):
+        return "Don't Lean/Independent/None"
+    else:
+        return None
+
+targetdf["political_strength"] = targetdf.apply(determine_political_strength,axis=1)
+
 ## 10 question items (includes 6 item questions as well)
 for name, mapping in mappings.stigma10.items():
     _meta = {
@@ -77,14 +105,16 @@ schema.add_field(meta)
 targetdf["ss_6_current"] = targetdf[[field["name"] for field in fields.ss_6_current]].mean(axis=1).fillna(lambda s: s.median())
 
 # impute missing stigma scale score values as the median score
-# TODO: compute based on individual scores
-targetdf["stigma_scale_score"] = sourcedf["stigma_scale_score"].fillna(lambda s: s.median())
-meta = fl.fields.NumberField(
-    name="stigma_scale_score",
-    title="6 question social stigma scale score",
-    description=source_variablelabels["stigma_scale_score"],
+ss_6_names = [field['name'] for field in fields.ss_6_current + fields.ss_6_past]
+targetdf["stigma_6item_score"] = sourcedf[ss_6_names].mean(axis=1).fillna(lambda s: s.median())
+meta = fl.Field.from_descriptor(fields.ss_6_composite)
+meta.description += (
+    "\n**Transforms**\n" f"- The mean of  `{'`,`'.join(ss_6_names)}`"
+    "\n"
+    "- Imputation used with median"
 )
 schema.add_field(meta)
+
 
 ss_10_past_names = [field['name'] for field in fields.ss_10_past]
 meta = fl.Field.from_descriptor(fields.ss_10_past_composite)
@@ -105,15 +135,15 @@ schema.add_field(meta)
 targetdf["ss_10_current"] = targetdf[ss_10_current_names].mean(axis=1).fillna(lambda s: s.median())
 
 
-
-targetdf["expanded_10item_stigma"] = sourcedf["expanded_10item_stigma"].fillna(lambda s: s.median())
-schema.add_field(
-    fl.fields.NumberField(
-        name="expanded_10item_stigma",
-        title="10 question social stigma scale score",
-        description=source_variablelabels["expanded_10item_stigma"],
-    )
+ss_10_names = [field['name'] for field in fields.ss_10_current + fields.ss_10_past]
+targetdf["stigma_10item_score"] = sourcedf[ss_10_names].mean(axis=1).fillna(lambda s: s.median())
+meta = fl.Field.from_descriptor(fields.ss_10_composite)
+meta.description += (
+    "\n**Transforms**\n" f"- The mean of  `{'`,`'.join(ss_10_names)}`"
+    "\n"
+    "- Imputation used with median"
 )
+schema.add_field(meta)
 ## Cobra racial awareness
 
 for name, mapping in mappings.cobra.items():
@@ -301,5 +331,6 @@ resource = fl.Resource(data=targetdf.fillna("")[schema.field_names].to_dict(orie
 report = resource.validate()
 if not report.valid:
     raise Exception("Analytic dataset not valid")
+    
 resource.schema.to_yaml("schemas/processed/protocol2_wave1_analytic.yaml")
 resource.write("data/processed/protocol2_wave1_analytic.csv")
