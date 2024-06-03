@@ -32,6 +32,7 @@ weights = [
     {
         "section": "Sampling/weights",
         "name": "p_over",
+        "type": "string",
         "title": "Sample indicator",
         "description": "Indicates which sample the participant was from (Oversampled state or general population)",
         "constraints": {"enum": ["AS oversample", "Gen pop"]},
@@ -65,8 +66,8 @@ demographic = [
         "section": "Demographics",
         "name": "educ5",
         "title": "5-level education",
-        "description": "",
-        "type": "number",
+        "description": "Highest educational degree based on 5 categories",
+        "type": "string",
     },
 ]
 
@@ -79,6 +80,7 @@ jcoin_hub = [
     },
     {
         "name": "jcoin_hub_types",
+        "type": "string",
         "description": "List of hubs with the type of study in parentheses OR not jcoin for this particular state",
         "examples": [
             "CoolHubName (Linkage), AnotherCoolHub (State policy rollout)",
@@ -129,46 +131,119 @@ sampling = [
 
 cobra_composite = {
     "name": "racial_privilege",
-    "type": "integer",
+    "type": "number",
     "title": "Unawareness of Racial Privilege ",
     "description": "Composite score for factor 1 in Color-Blind Racial Attitudes Scale.",
     **standardsmappings.cobra,
-    "custom": {"derived": True},
 }
+
+cobra_items = [
+    {
+        "name": "race_whiteadvantage",
+        "description": "[White people in the U.S. have certain advantages because of the color of their skin.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+    {
+        "name": "race_successful",
+        "description": "[Race is very important in determining who is successful and who is not.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+    {
+        "name": "race_prison",
+        "description": "[Race plays an important role in who gets sent to prison.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+    {
+        "name": "race_socservices",
+        "description": "[Race plays a major role in the type of social services (such as type of health care or day care) that people receive in the U.S.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+    {
+        "name": "race_minadvantage",
+        "description": "[Racial and ethnic minorities in the U.S. have certain advantages because of the color of their skin.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+    {
+        "name": "race_rich",
+        "description": "[Everyone who works hard, no matter what race they are, has an equal chance to become rich.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+    {
+        "name": "race_whiteblame",
+        "description": "[White people are more to blame for racial discrimination than racial and ethnic minorities.] Do you disagree or agree with the following statements?",
+        "type": "integer",
+    },
+]
+
 
 ss_6_past = [
     {
         "section": "Social stigma",
         "name": "ss_a_historywork",
         "title": "Person with past OUD **work** closely",
+        "description": (
+            "[I would be willing to have a person with a past history of opioid use disorder start working closely with me on a job.]"
+            "Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
     },
     {
         "section": "Social stigma",
         "name": "ss_b_historymarry",
         "title": "Person with past OUD **marry** into family",
+        "description":("[I would be comfortable having a person with a past history of opioid use disorder marry into my close or immediate family.] "
+            "Do you disagree or agree with the following statements?"),
+        "type": "integer",
     },
 ]
 
 ss_6_current = [
     {
         "section": "Social stigma",
-        "name": "ss_a_historywork",
+        "name": "ss_c_currentwork",
         "title": "Person with past OUD: **working** closely",
+        "description": (
+            "[I would be willing to have a person with a current opioid use disorder start working closely with me on a job.]"
+            "Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
     },
     {
         "section": "Social stigma",
-        "name": "ss_b_historymarry",
+        "name": "ss_d_currentmarry",
+        "description": (
+            "[I would be comfortable having a person with a current opioid use disorder marry into my close or immediate family.]"
+            " Do you disagree or agree with the following statements?"
+        ),
         "title": "Person with past OUD: **marrying** into family",
+        "type": "integer",
     },
-    {"name": "ss_e_dangerous"},
-    {"name": "ss_f_trust"},
+    {
+        "section": "Social stigma",
+        "name": "ss_e_dangerous",
+        "title": "Person with current OUD: Dangerous",
+        "description": (
+            "[People with a current opioid use disorder are more dangerous than the general population.]"
+            " Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
+    },
+    {
+        "name": "ss_f_trust",
+        "title": "Person with current OUD: Cannot Trust",
+        "description": (
+            "[A person who currently has an opioid use disorder cannot be trusted.]"
+            " Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
+    },
 ]
+
 ss_6_current_composite = {
     "section": "Social stigma (6 question)",
     "name": "ss_6_current",
     "type": "number",
     "description": "Attitude towards opioid stigma for **current** users using 2 past user questions in 6 question stigma scale.",
-    "custom": {"derived": True},
 }
 ss_6_past_composite = {
     "section": "Social stigma (6 question)",
@@ -178,17 +253,49 @@ ss_6_past_composite = {
         "Attitude towards opioid stigma for **past**"
         "users using 2 past user questions in 6 question stigma scale."
     ),
-    "custom": {"derived": True},
 }
-ss_6_composite = {"name":"stigma_6item_composite",
-    "title":"6 question social stigma scale score",
-    "description":"Composite score (derived from 6 questions) on attitude towards opioid stigma users",
+ss_6_composite = {
+    "name": "stigma_6item_composite",
+    "type": "number",
+    "title": "6 question social stigma scale score",
+    "description": "Composite score (derived from 6 questions) on attitude towards opioid stigma users",
 }
-ss_10_past = ss_6_past + [{"name": "ss_historysteal"}, {"name": "ss_historyhighrisk"}]
+ss_10_past = ss_6_past + [
+    {
+        "name": "ss_historysteal",
+        "description": (
+            "[A person who has a past history of opioid use disorder would be willing to steal money or valuable items in order to get drugs.] "
+            "Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
+    },
+    {
+        "name": "ss_historyhighrisk",
+        "description": (
+            "[A person who has a past history of opioid use disorder is likely to experience personal problems that would make them a high-risk employee in my workplace.] "
+            "Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
+    },
+]
 
 ss_10_current = ss_6_current + [
-    {"name": "ss_currentsteal"},
-    {"name": "ss_currenthighrisk"},
+    {
+        "name": "ss_currentsteal",
+        "description": (
+            "[A person who currently has an opioid use disorder would be willing to steal money or valuable items in order to get drugs.] "
+            "Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
+    },
+    {
+        "name": "ss_currenthighrisk",
+        "description": (
+            "[A person who currently has an opioid use disorder is likely to experience personal problems that would make them a high-risk employee in my workplace.] "
+            "Do you disagree or agree with the following statements?"
+        ),
+        "type": "integer",
+    },
 ]
 
 ss_10_current_composite = {
@@ -196,7 +303,6 @@ ss_10_current_composite = {
     "name": "ss_10_current",
     "type": "number",
     "description": "Attitude towards opioid stigma for **current** users using all past user questions in 10 question stigma scale.",
-    "custom": {"derived": True},
 }
 ss_10_past_composite = {
     "section": "Social stigma (10 question)",
@@ -206,27 +312,27 @@ ss_10_past_composite = {
         "Attitude towards opioid stigma for **past**"
         "users using all past user questions in 10 question stigma scale."
     ),
-    "custom": {"derived": True},
 }
 
 ss_10_composite = {
-        "section":"Social stigma (10 question)",
-        "name":"stigma_10item",
-        "title":"10 question social stigma scale score",
-        "type":"number",
-        "description":"Composite score (derived from 10 questions) on attitude towards opioid stigma users"
+    "section": "Social stigma (10 question)",
+    "name": "stigma_10item_composite",
+    "title": "10 question social stigma scale score",
+    "type": "number",
+    "description": "Composite score (derived from 10 questions) on attitude towards opioid stigma users",
 }
 
 political = [
-    {   "section":"Political Party",
-        "name":"party_affiliation",
-        "title":"Political Party Affiliation (Democrat, Republican, Independent)",
-        "description":"Do you consider yourself a Democrat, a Republican, an Independent or none of these?",
-        "type":"string",
-        "custom":{"jcoin:original_name":"pid1"}
+    {
+        "section": "Political Party",
+        "name": "party_affiliation",
+        "title": "Political Party Affiliation (Democrat, Republican, Independent)",
+        "description": "Do you consider yourself a Democrat, a Republican, an Independent or none of these?",
+        "type": "string",
+        "custom": {"jcoin:original_name": "pid1"},
     },
     {
-        "section":"Political Party",
+        "section": "Political Party",
         "name": "strong_democrat",
         "title": "Strong Democrat",
         "description": "Do you consider yourself a strong or not so strong Democrat?",
@@ -234,7 +340,7 @@ political = [
         "custom": {"jcoin:original_name": "pida"},
     },
     {
-        "section":"Political Party",
+        "section": "Political Party",
         "name": "strong_republican",
         "title": "String Republican",
         "description": "Do you consider yourself a strong or not so strong Republican?",
@@ -242,17 +348,17 @@ political = [
         "custom": {"jcoin:original_name": "pidb"},
     },
     {
-        "section":"Political Party",
+        "section": "Political Party",
         "name": "lean_demo_or_repub",
-        "title":"Lean Democrat or Republican",
+        "title": "Lean Democrat or Republican",
         "type": "string",
         "custom": {"jcoin:original_name": "pidi"},
-    }
+    },
 ]
-political_strength = {  
-    "section":"Political Party",
-    "name":"party_strength",
-    "title":"Political Party Strength of Affiliation",
-    "type":"string",
-    "custom":{"jcoin:original_name":"partyid7"}
+political_strength = {
+    "section": "Political Party",
+    "name": "party_strength",
+    "title": "Political Party Strength of Affiliation",
+    "type": "string",
+    "custom": {"jcoin:original_name": "partyid7"},
 }

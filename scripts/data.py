@@ -1,8 +1,6 @@
 """ 
 
 process data and save in data/processed folder
-TODO: refactor code in the data module (right now I just copy/pasted the relevant code from the legacy notebook in `data`)
-TODO: make custom Field objects and transform Steps to make metadata more readable
 
 """
 
@@ -36,163 +34,7 @@ sourcedf.columns = sourcedf.columns.str.lower()
 targetdf = sourcedf[["caseid"]].copy()
 schema = fl.Schema(fields=[fl.Field.from_descriptor(metadata.fields.caseid)])
 
-# POPULATE TARGET SCHEMA AND DF
-for field in fields.demographic:
-    field = fl.Field.from_descriptor(field)
-    schema.add_field(field)
-
-
-# political questions
-for field in fields.political:
-    targetdf[field["name"]] = sourcedf[field["custom"]["jcoin:original_name"]]
-
-def determine_political_strength(row):
-    """ assign values based on values in other political party
-    fields
-    """ 
-    if row.lean_demo_or_repub == "Lean Democrat":
-        return "Lean Democrat"
-    elif row.lean_demo_or_repub == "Lean Republican":
-        return "Lean Republican"
-    elif row.strong_republican == "Not so strong Republican":
-        return "Not so strong Republican"
-    elif row.strong_republican == "Strong Republican":
-        return "Strong Republican"
-    elif row.strong_democrat == "Not so strong Democrat":
-        return "Not so strong Democrat"
-    elif row.strong_democrat == "Strong Democrat":
-        return "Strong Democrat"
-    elif row.party_affiliation.isin(["Independent","None of these"]):
-        return "Don't Lean/Independent/None"
-    else:
-        return None
-
-targetdf["political_strength"] = targetdf.apply(determine_political_strength,axis=1)
-
-## 10 question items (includes 6 item questions as well)
-for name, mapping in mappings.stigma10.items():
-    _meta = {
-        "name": name,
-        "description": source_variablelabels[name],
-        "enumLabels": mapping,
-        **standardsmappings.stigma10,
-    }
-    data, meta = transforms.categorical_to_numeric(
-        data=sourcedf[name], mapping=mapping, meta=_meta
-    )
-    meta["description"] += "**Imputation**: Most frequent value (mode)"
-    data.fillna(data.mode()[0],inplace=True)
-    targetdf[name] = data
-    schema.add_field(fl.Field.from_descriptor(meta))
-
-# current and past usage
-
-## 6 question
-
-ss_6_past_names = [field['name'] for field in fields.ss_6_past]
-meta = fl.Field.from_descriptor(fields.ss_6_past_composite)
-meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_6_past_names)}`"
-schema.add_field(meta)
-targetdf["ss_6_past"] = (
-    targetdf[ss_6_past_names]
-    .mean(axis=1)
-)
-meta = fl.Field.from_descriptor(fields.ss_6_current_composite)
-meta.description += (
-    "\n**Transforms**\n" f"The mean of  `{'`,`'.join([field['name'] for field in fields.ss_6_current])}`"
-)
-schema.add_field(meta)
-targetdf["ss_6_current"] = targetdf[[field["name"] for field in fields.ss_6_current]].mean(axis=1).fillna(lambda s: s.median())
-
-# impute missing stigma scale score values as the median score
-ss_6_names = [field['name'] for field in fields.ss_6_current + fields.ss_6_past]
-targetdf["stigma_6item_score"] = sourcedf[ss_6_names].mean(axis=1).fillna(lambda s: s.median())
-meta = fl.Field.from_descriptor(fields.ss_6_composite)
-meta.description += (
-    "\n**Transforms**\n" f"- The mean of  `{'`,`'.join(ss_6_names)}`"
-    "\n"
-    "- Imputation used with median"
-)
-schema.add_field(meta)
-
-
-ss_10_past_names = [field['name'] for field in fields.ss_10_past]
-meta = fl.Field.from_descriptor(fields.ss_10_past_composite)
-meta.description += "\n**Transforms**\n" f"The mean of  `{'`,`'.join(ss_10_past_names)}`"
-meta.description += "\n- Median used for imputation"
-schema.add_field(meta)
-targetdf["ss_10_past"] = targetdf[ss_10_past_names].mean(axis=1).fillna(lambda s: s.median())
-
-
-ss_10_current_names = [field['name'] for field in fields.ss_10_current]
-meta = fl.Field.from_descriptor(fields.ss_10_current_composite)
-meta.description += (
-    "\n**Transforms**\n" f"- The mean of  `{'`,`'.join(ss_10_current_names)}`"
-    "\n"
-    "- Imputation used with median"
-)
-schema.add_field(meta)
-targetdf["ss_10_current"] = targetdf[ss_10_current_names].mean(axis=1).fillna(lambda s: s.median())
-
-
-ss_10_names = [field['name'] for field in fields.ss_10_current + fields.ss_10_past]
-targetdf["stigma_10item_score"] = sourcedf[ss_10_names].mean(axis=1).fillna(lambda s: s.median())
-meta = fl.Field.from_descriptor(fields.ss_10_composite)
-meta.description += (
-    "\n**Transforms**\n" f"- The mean of  `{'`,`'.join(ss_10_names)}`"
-    "\n"
-    "- Imputation used with median"
-)
-schema.add_field(meta)
-## Cobra racial awareness
-
-for name, mapping in mappings.cobra.items():
-
-    data, meta = transforms.categorical_to_numeric(
-        data=sourcedf[name], mapping=mapping, meta={"name":name,"description":source_variablelabels[name],
-            **standardsmappings.cobra})
-    meta["description"] += "**Imputation**: Most frequent value (mode)"
-    data.fillna(data.mode()[0],inplace=True)
-    targetdf[name] = data
-    schema.add_field(fl.Field.from_descriptor(meta))
-
-
-targetdf["racial_privilege"] = targetdf[mappings.cobra.keys()].sum(axis=1)
-meta = fl.Field.from_descriptor(fields.cobra_composite)
-meta.description += "\n**Transforms**\n" f"The sum (composite) of  `{'`,`'.join(mappings.cobra.keys())}`"
-schema.add_field(meta)
-
-vars_of_interest = [
-    "personaluse_ever",
-    "familyuse_ever",
-    "personalcrimjust_ever",
-    "familycrimjust_ever",
-]
-for name in vars_of_interest:
-    targetdf[name] = sourcedf[name].copy()
-    schema.add_field(fl.Field.from_descriptor({"name":name,"type":"string"}))
-
-# clean up some of the categoricals to be consistently coded
-targetdf.familycrimjust_ever.replace({0: "No", 1: "Yes"}, inplace=True)
-targetdf.familyuse_ever.replace({" No": "No"}, inplace=True)
-targetdf.personalcrimjust_ever.replace(
-    {
-        "Yes, ever arrested or incarcerated": "Yes",
-        "No, never arrested or incarcerated": "No",
-    },
-    inplace=True,
-)
-
-
-# %%
-
-# # impute missing stigma scale score vals with median, impute missing personaluse_ever with mode, "No"
-# replace missing values of personaluse_ever with mode value of 'No'
-targetdf.personaluse_ever.fillna("No", inplace=True)
-targetdf.familyuse_ever.fillna("No", inplace=True)
-targetdf.personalcrimjust_ever.fillna("No", inplace=True)
-targetdf.familycrimjust_ever.fillna("No", inplace=True)
-
+# POPULATE TARGET SCHEMA AND DF WITH DEMOGRAPHICS
 # %%
 # add df column with state 2 letter code
 # https://pythonfix.com/code/us-states-abbrev.py/
@@ -200,9 +42,91 @@ targetdf.familycrimjust_ever.fillna("No", inplace=True)
 
 us_state_to_abbrev = fl.Resource(path="data/state_abbrev_mappings.json").read_data()
 state_cd = sourcedf.state.replace(us_state_to_abbrev)
-targetdf.insert(6, "state_cd", state_cd, True)
+targetdf["state_cd"] = state_cd
+for field in fields.demographic:
+    field = fl.Field.from_descriptor(field)
+    schema.add_field(field)
+    if not field.name in targetdf:
+        targetdf[field.name] = sourcedf[field.name]
 
-# %%
+## political questions (rename to more human-readable names)
+for field in fields.political:
+    targetdf[field["name"]] = sourcedf[field["custom"]["jcoin:original_name"]]
+
+targetdf["political_strength"] = targetdf.apply(transforms.applyfxns.determine_political_strength,axis=1)
+
+## social stigma ############
+### 10 question items (includes 6 item questions as well)
+#### prepare individual items
+for field in fields.ss_10_past + fields.ss_10_current:
+    integer_coding = mappings.stigma10[field["name"]]
+    data = sourcedf[field["name"]]
+    data, field = transforms.categorical_to_numeric(data,field,integer_coding)
+    data, field = transforms.impute_mode(data,field)
+    targetdf[field["name"]] = data
+    schema.add_field(fl.Field.from_descriptor(field))
+
+#### compute composite items
+ss_6_past = fields.ss_6_past_composite,fields.ss_6_past
+ss_6_current = fields.ss_6_current_composite,fields.ss_6_current
+ss_6 = fields.ss_6_composite,fields.ss_6_current + fields.ss_6_past
+ss_10_past = fields.ss_10_past_composite,fields.ss_10_past
+ss_10_current = fields.ss_10_current_composite,fields.ss_10_current
+ss_10 = fields.ss_10_composite,fields.ss_10_current + fields.ss_10_past
+
+for composite_field,input_fields in [ss_6_past,ss_6_current,ss_6,ss_10_past,ss_10_current,ss_10]:
+    fieldnames = [field["name"] for field in input_fields]
+    targetdf[composite_field["name"]],field = transforms.compute_mean(targetdf[fieldnames],composite_field)
+    schema.add_field(fl.Field.from_descriptor(field))
+
+
+## Cobra racial awareness
+
+for field in fields.cobra_items:
+    integer_coding = mappings.cobra[field["name"]]
+    data = sourcedf[field["name"]]
+    data, field = transforms.categorical_to_numeric(data,field,integer_coding)
+    data, field = transforms.impute_mode(data,field)
+    targetdf[field["name"]] = data
+    schema.add_field(fl.Field.from_descriptor(field))
+
+fieldnames = [field["name"] for field in fields.cobra_items]
+composite_field = fields.cobra_composite
+targetdf[composite_field["name"]],field = transforms.compute_mean(targetdf[fieldnames],composite_field)
+schema.add_field(fl.Field.from_descriptor(field))
+
+# vars_of_interest = [
+#     "personaluse_ever",
+#     "familyuse_ever",
+#     "personalcrimjust_ever",
+#     "familycrimjust_ever",
+# ]
+# for name in vars_of_interest:
+#     targetdf[name] = sourcedf[name].copy()
+#     schema.add_field(fl.Field.from_descriptor({"name":name,"type":"string"}))
+
+# # clean up some of the categoricals to be consistently coded
+# targetdf.familycrimjust_ever.replace({0: "No", 1: "Yes"}, inplace=True)
+# targetdf.familyuse_ever.replace({" No": "No"}, inplace=True)
+# targetdf.personalcrimjust_ever.replace(
+#     {
+#         "Yes, ever arrested or incarcerated": "Yes",
+#         "No, never arrested or incarcerated": "No",
+#     },
+#     inplace=True,
+# )
+
+
+# # %%
+
+# # # impute missing stigma scale score vals with median, impute missing personaluse_ever with mode, "No"
+# # replace missing values of personaluse_ever with mode value of 'No'
+# targetdf.personaluse_ever.fillna("No", inplace=True)
+# targetdf.familyuse_ever.fillna("No", inplace=True)
+# targetdf.personalcrimjust_ever.fillna("No", inplace=True)
+# targetdf.familycrimjust_ever.fillna("No", inplace=True)
+
+# # %%
 ##### Add jcoin information ####
 jcoin_json = fl.Resource(path="data/jcoin_states.json").read_data()
 
@@ -234,11 +158,12 @@ targetdf["p_over"] = sourcedf["p_over"].copy() #TODO: make part of sample and we
 pop_counts_by_sampletypexstate = (
     targetdf.convert_dtypes()
     .assign(jcoin_hub_count=lambda df: df.jcoin_hub_count.astype(str))
-    .groupby(["state_cd", "p_over"])["stigma_scale_score"]
+    .groupby(["state_cd", "p_over"])
     .count()
-    .unstack(["p_over"])
+    .iloc[:,0]
+   .unstack(["p_over"])
+   .assign(total=lambda df:df.sum(axis=1))
 )
-pop_counts_by_sampletypexstate["total"] = pop_counts_by_sampletypexstate.sum(axis=1)
 
 # %%
 # merge jcoin info
@@ -321,16 +246,17 @@ for field in fields.sampling + fields.weights:
     field = fl.Field.from_descriptor(field)
     schema.add_field(field)
 
-for name in schema.field_names:
-    if not name in targetdf:
-        targetdf[name] = sourcedf[name]
+# for name in schema.field_names:
+#     if not name in targetdf:
+#         targetdf[name] = sourcedf[name]
 
-resource = fl.Resource(data=targetdf.fillna("")[schema.field_names].to_dict(orient="records"), schema=schema)
+resource = fl.Resource(data=targetdf[schema.field_names].fillna("").to_dict(orient="records"),schema=schema)
 
 # make sure the new target dataset aligns with the schema (ie the expected datatypes etc)
 report = resource.validate()
 if not report.valid:
+    print(report.to_summary())
     raise Exception("Analytic dataset not valid")
-    
+
 resource.schema.to_yaml("schemas/processed/protocol2_wave1_analytic.yaml")
 resource.write("data/processed/protocol2_wave1_analytic.csv")
