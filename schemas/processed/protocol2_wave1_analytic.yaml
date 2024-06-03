@@ -29,20 +29,20 @@ fields:
     description: ''
     section: Demographics
   - name: educ5
-    type: number
+    type: string
     title: 5-level education
-    description: ''
+    description: Highest educational degree based on 5 categories
     section: Demographics
   - name: ss_a_historywork
     type: integer
+    title: Person with past OUD **work** closely
     description: '[I would be willing to have a person with a past history of opioid
-      use disorder start working closely with me on a job.] Do you disagree or agree
+      use disorder start working closely with me on a job.]Do you disagree or agree
       with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -50,34 +50,23 @@ fields:
         - 3
         - 2
         - 1
+    section: Social stigma
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
       '3': Neither disagree nor agree
       '2': Somewhat agree
       '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
   - name: ss_b_historymarry
     type: integer
+    title: Person with past OUD **marry** into family
     description: '[I would be comfortable having a person with a past history of opioid
       use disorder marry into my close or immediate family.] Do you disagree or agree
       with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -85,172 +74,22 @@ fields:
         - 3
         - 2
         - 1
+    section: Social stigma
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
       '3': Neither disagree nor agree
       '2': Somewhat agree
       '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_c_currentwork
-    type: integer
-    description: '[I would be willing to have a person with a current opioid use disorder
-      start working closely with me on a job.] Do you disagree or agree with the following
-      statements?
-
-      **Transform steps**
-
-      - Imputed the mode (`Neither disagree nor agree`)- Replaced value labels with
-      integer codes (see `enumLabels`)**Imputation**: Most frequent value (mode)'
-    constraints:
-      enum:
-        - 5
-        - 4
-        - 3
-        - 2
-        - 1
-    enumLabels:
-      '5': Strongly disagree
-      '4': Somewhat disagree
-      '3': Neither disagree nor agree
-      '2': Somewhat agree
-      '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_d_currentmarry
-    type: integer
-    description: '[I would be comfortable having a person with a current opioid use
-      disorder marry into my close or immediate family.] Do you disagree or agree
-      with the following statements?
-
-      **Transform steps**
-
-      - Imputed the mode (`Strongly disagree`)- Replaced value labels with integer
-      codes (see `enumLabels`)**Imputation**: Most frequent value (mode)'
-    constraints:
-      enum:
-        - 5
-        - 4
-        - 3
-        - 2
-        - 1
-    enumLabels:
-      '5': Strongly disagree
-      '4': Somewhat disagree
-      '3': Neither disagree nor agree
-      '2': Somewhat agree
-      '1': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_e_dangerous
-    type: integer
-    description: '[People with a current opioid use disorder are more dangerous than
-      the general population.] Do you disagree or agree with the following statements?
-
-      **Transform steps**
-
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
-    constraints:
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-    enumLabels:
-      '1': Strongly disagree
-      '2': Somewhat disagree
-      '3': Neither disagree nor agree
-      '4': Somewhat agree
-      '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
-  - name: ss_f_trust
-    type: integer
-    description: '[A person who currently has an opioid use disorder cannot be trusted.]
-      Do you disagree or agree with the following statements?
-
-      **Transform steps**
-
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
-    constraints:
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-    enumLabels:
-      '1': Strongly disagree
-      '2': Somewhat disagree
-      '3': Neither disagree nor agree
-      '4': Somewhat agree
-      '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
   - name: ss_historysteal
     type: integer
     description: '[A person who has a past history of opioid use disorder would be
       willing to steal money or valuable items in order to get drugs.] Do you disagree
       or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Neither disagree nor agree`)- Replaced value labels with
-      integer codes (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 1
@@ -264,28 +103,15 @@ fields:
       '3': Neither disagree nor agree
       '4': Somewhat agree
       '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
   - name: ss_historyhighrisk
     type: integer
     description: '[A person who has a past history of opioid use disorder is likely
       to experience personal problems that would make them a high-risk employee in
       my workplace.] Do you disagree or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Neither disagree nor agree`)- Replaced value labels with
-      integer codes (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 1
@@ -299,28 +125,108 @@ fields:
       '3': Neither disagree nor agree
       '4': Somewhat agree
       '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
+  - name: ss_c_currentwork
+    type: integer
+    title: 'Person with past OUD: **working** closely'
+    description: '[I would be willing to have a person with a current opioid use disorder
+      start working closely with me on a job.]Do you disagree or agree with the following
+      statements?
+
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
+
+      **Imputation**: Most frequent value (mode)'
+    constraints:
+      enum:
+        - 5
+        - 4
+        - 3
+        - 2
+        - 1
+    section: Social stigma
+    enumLabels:
+      '5': Strongly disagree
+      '4': Somewhat disagree
+      '3': Neither disagree nor agree
+      '2': Somewhat agree
+      '1': Strongly agree
+  - name: ss_d_currentmarry
+    type: integer
+    title: 'Person with past OUD: **marrying** into family'
+    description: '[I would be comfortable having a person with a current opioid use
+      disorder marry into my close or immediate family.] Do you disagree or agree
+      with the following statements?
+
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
+
+      **Imputation**: Most frequent value (mode)'
+    constraints:
+      enum:
+        - 5
+        - 4
+        - 3
+        - 2
+        - 1
+    section: Social stigma
+    enumLabels:
+      '5': Strongly disagree
+      '4': Somewhat disagree
+      '3': Neither disagree nor agree
+      '2': Somewhat agree
+      '1': Strongly agree
+  - name: ss_e_dangerous
+    type: integer
+    title: 'Person with current OUD: Dangerous'
+    description: '[People with a current opioid use disorder are more dangerous than
+      the general population.] Do you disagree or agree with the following statements?
+
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
+
+      **Imputation**: Most frequent value (mode)'
+    constraints:
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+    section: Social stigma
+    enumLabels:
+      '1': Strongly disagree
+      '2': Somewhat disagree
+      '3': Neither disagree nor agree
+      '4': Somewhat agree
+      '5': Strongly agree
+  - name: ss_f_trust
+    type: integer
+    title: 'Person with current OUD: Cannot Trust'
+    description: '[A person who currently has an opioid use disorder cannot be trusted.]
+      Do you disagree or agree with the following statements?
+
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
+
+      **Imputation**: Most frequent value (mode)'
+    constraints:
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+    enumLabels:
+      '1': Strongly disagree
+      '2': Somewhat disagree
+      '3': Neither disagree nor agree
+      '4': Somewhat agree
+      '5': Strongly agree
   - name: ss_currentsteal
     type: integer
     description: '[A person who currently has an opioid use disorder would be willing
       to steal money or valuable items in order to get drugs.] Do you disagree or
       agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 1
@@ -334,28 +240,15 @@ fields:
       '3': Neither disagree nor agree
       '4': Somewhat agree
       '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
   - name: ss_currenthighrisk
     type: integer
     description: '[A person who currently has an opioid use disorder is likely to
       experience personal problems that would make them a high-risk employee in my
       workplace.] Do you disagree or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 1
@@ -369,81 +262,78 @@ fields:
       '3': Neither disagree nor agree
       '4': Somewhat agree
       '5': Strongly agree
-    section: 6 question stigma scale
-    standardsMappings:
-      - instrument:
-          title: ''
-          url: ''
-        item:
-          title: ''
-      - instrument:
-          source: []
-          url: ''
-        item:
-          title: ''
   - name: ss_6_past
     type: number
     description: 'Attitude towards opioid stigma for **past**users using 2 past user
       questions in 6 question stigma scale.
 
-      **Transforms**
-
-      The mean of  `ss_a_historywork`,`ss_b_historymarry`'
+      **Transform**: The mean of `ss_a_historywork`,`ss_b_historymarry`'
     section: Social stigma (6 question)
-    custom:
-      derived: true
   - name: ss_6_current
     type: number
     description: 'Attitude towards opioid stigma for **current** users using 2 past
       user questions in 6 question stigma scale.
 
-      **Transforms**
-
-      The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_e_dangerous`,`ss_f_trust`'
+      **Transform**: The mean of `ss_c_currentwork`,`ss_d_currentmarry`,`ss_e_dangerous`,`ss_f_trust`'
     section: Social stigma (6 question)
-    custom:
-      derived: true
-  - name: stigma_scale_score
+  - name: stigma_6item_composite
     type: number
     title: 6 question social stigma scale score
+    description: 'Composite score (derived from 6 questions) on attitude towards opioid
+      stigma users
+
+      **Transform**: The mean of `ss_c_currentwork`,`ss_d_currentmarry`,`ss_e_dangerous`,`ss_f_trust`,`ss_a_historywork`,`ss_b_historymarry`'
   - name: ss_10_past
     type: number
     description: 'Attitude towards opioid stigma for **past**users using all past
       user questions in 10 question stigma scale.
 
-      **Transforms**
-
-      The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_historysteal`,`ss_historyhighrisk`
-
-      - Median used for imputation'
+      **Transform**: The mean of `ss_a_historywork`,`ss_b_historymarry`,`ss_historysteal`,`ss_historyhighrisk`'
     section: Social stigma (10 question)
-    custom:
-      derived: true
   - name: ss_10_current
     type: number
     description: 'Attitude towards opioid stigma for **current** users using all past
       user questions in 10 question stigma scale.
 
-      **Transforms**
-
-      - The mean of  `ss_a_historywork`,`ss_b_historymarry`,`ss_e_dangerous`,`ss_f_trust`,`ss_currentsteal`,`ss_currenthighrisk`
-
-      - Imputation used with median'
+      **Transform**: The mean of `ss_c_currentwork`,`ss_d_currentmarry`,`ss_e_dangerous`,`ss_f_trust`,`ss_currentsteal`,`ss_currenthighrisk`'
     section: Social stigma (10 question)
-    custom:
-      derived: true
-  - name: expanded_10item_stigma
+  - name: stigma_10item_composite
     type: number
     title: 10 question social stigma scale score
+    description: 'Composite score (derived from 10 questions) on attitude towards
+      opioid stigma users
+
+      **Transform**: The mean of `ss_c_currentwork`,`ss_d_currentmarry`,`ss_e_dangerous`,`ss_f_trust`,`ss_currentsteal`,`ss_currenthighrisk`,`ss_a_historywork`,`ss_b_historymarry`,`ss_historysteal`,`ss_historyhighrisk`'
+    section: Social stigma (10 question)
+  - name: race_whiteadvantage
+    type: integer
+    description: '[White people in the U.S. have certain advantages because of the
+      color of their skin.] Do you disagree or agree with the following statements?
+
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
+
+      **Imputation**: Most frequent value (mode)'
+    constraints:
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+    enumLabels:
+      '1': Strongly disagree
+      '2': Somewhat disagree
+      '3': Neither disagree nor agree
+      '4': Somewhat agree
+      '5': Strongly agree
   - name: race_successful
     type: integer
     description: '[Race is very important in determining who is successful and who
       is not.] Do you disagree or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Strongly disagree`)- Replaced value labels with integer
-      codes (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -451,21 +341,6 @@ fields:
         - 3
         - 2
         - 1
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
@@ -477,10 +352,9 @@ fields:
     description: '[Race plays an important role in who gets sent to prison.] Do you
       disagree or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -488,21 +362,6 @@ fields:
         - 3
         - 2
         - 1
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
@@ -515,10 +374,9 @@ fields:
       type of health care or day care) that people receive in the U.S.] Do you disagree
       or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -526,21 +384,6 @@ fields:
         - 3
         - 2
         - 1
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
@@ -553,10 +396,9 @@ fields:
       because of the color of their skin.] Do you disagree or agree with the following
       statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Somewhat agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -564,21 +406,6 @@ fields:
         - 3
         - 2
         - 1
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
@@ -590,10 +417,9 @@ fields:
     description: '[Everyone who works hard, no matter what race they are, has an equal
       chance to become rich.] Do you disagree or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Strongly agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 1
@@ -601,21 +427,6 @@ fields:
         - 3
         - 4
         - 5
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
     enumLabels:
       '1': Strongly disagree
       '2': Somewhat disagree
@@ -627,10 +438,9 @@ fields:
     description: '[White people are more to blame for racial discrimination than racial
       and ethnic minorities.] Do you disagree or agree with the following statements?
 
-      **Transform steps**
+      - **Transform**:Replaced value labels with integer codes (see `enumLabels`)
 
-      - Imputed the mode (`Strongly disagree`)- Replaced value labels with integer
-      codes (see `enumLabels`)**Imputation**: Most frequent value (mode)'
+      **Imputation**: Most frequent value (mode)'
     constraints:
       enum:
         - 5
@@ -638,72 +448,18 @@ fields:
         - 3
         - 2
         - 1
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
     enumLabels:
       '5': Strongly disagree
       '4': Somewhat disagree
       '3': Neither disagree nor agree
       '2': Somewhat agree
       '1': Strongly agree
-  - name: race_whiteadvantage
-    type: integer
-    description: '[White people in the U.S. have certain advantages because of the
-      color of their skin.] Do you disagree or agree with the following statements?
-
-      **Transform steps**
-
-      - Imputed the mode (`Strongly agree`)- Replaced value labels with integer codes
-      (see `enumLabels`)**Imputation**: Most frequent value (mode)'
-    constraints:
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-    section: 'Color-Blind Racial Attitudes: Racial Privilege'
-    standardsMappings:
-      - instrument:
-          source: Neville, H. A., Lilly, R. L., Duran, G., Lee, R. M., & Browne, L.
-            (2000). Construction and initial validation of the color-blind racial
-            attitudes scale (CoBRAS). Journal of counseling psychology, 47(1), 59.
-          title: CoBRA publication
-          url: https://doi.org/10.1037/0022-0167.47.1.59
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-      - instrument:
-          title: The Color-Blind Racial Attitudes Scale (CoBRAS) Form
-          url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
-        item:
-          title: 'Item in Factor 1: Unawareness of Racial Privilege'
-    enumLabels:
-      '1': Strongly disagree
-      '2': Somewhat disagree
-      '3': Neither disagree nor agree
-      '4': Somewhat agree
-      '5': Strongly agree
   - name: racial_privilege
-    type: integer
+    type: number
     title: 'Unawareness of Racial Privilege '
     description: 'Composite score for factor 1 in Color-Blind Racial Attitudes Scale.
 
-      **Transforms**
-
-      The sum (composite) of  `race_successful`,`race_prison`,`race_socservices`,`race_minadvantage`,`race_rich`,`race_whiteblame`,`race_whiteadvantage`'
+      **Transform**: The mean of `race_whiteadvantage`,`race_successful`,`race_prison`,`race_socservices`,`race_minadvantage`,`race_rich`,`race_whiteblame`'
     section: 'Color-Blind Racial Attitudes: Racial Privilege'
     standardsMappings:
       - instrument:
@@ -719,16 +475,6 @@ fields:
           url: https://emerge.ucsd.edu/r_5buk6wz1vvqwomr
         item:
           title: 'Item in Factor 1: Unawareness of Racial Privilege'
-    custom:
-      derived: true
-  - name: personaluse_ever
-    type: string
-  - name: familyuse_ever
-    type: string
-  - name: personalcrimjust_ever
-    type: string
-  - name: familycrimjust_ever
-    type: string
   - name: jcoin_hub_count
     type: integer
     description: Number of hubs in a particular state
