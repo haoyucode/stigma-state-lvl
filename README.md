@@ -13,6 +13,7 @@ MAARC Stigma Survey Protocol 2 ("in-depth")
 
 2. Run from CLI: `dvc fetch` : download all files from remote.
 3. Run from CLI: `python scripts/data.py` TOODO: make function and put into `report.ipynb` to make easier (or use snakeMake?)
+    !important The `datapackage.json` is thought of as the metadata providing a starting point for understanding the data in the repository.
 4. `report.ipynb` : use the metadata, model, and visualization functions to make a report. This notebook's goal is to not only
     report out on selected variable estimations but also to demostrate the utility of frictionless in the context of an analytic 
     report/explroation.
