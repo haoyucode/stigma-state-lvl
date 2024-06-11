@@ -43,7 +43,7 @@ def get_domain_estimates(df,ycol,domaincol,stratacol,psucol):
         psu=df[psucol].astype(int),
         domain=df[domaincol]
     )
-    return estimator.to_dataframe()
+    return estimator.to_dataframe().rename(columns={"_domain":domaincol})
 
 #NOTE: in 4/20 meeting notebook, `estimator_df = sub_df_1_as_oversample_states[sub_df_1_as_oversample_states["partyid5_strong_d"] == 1]`
 # in addition to strong_r. I'm wondering why the reasoning behind this..
