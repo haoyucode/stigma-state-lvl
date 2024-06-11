@@ -15,7 +15,7 @@
     {
       "name": "jcoin-states",
       "type": "json",
-      "path": "data/jcoin_states.json",
+      "path": "data/external/jcoin_states.json",
       "scheme": "file",
       "format": "json",
       "mediatype": "text/json"
@@ -23,7 +23,7 @@
     {
       "name": "state-abbreviations",
       "type": "json",
-      "path": "data/state_abbrev_mappings.json",
+      "path": "data/external/state_abbrev_mappings.json",
       "scheme": "file",
       "format": "json",
       "mediatype": "text/json"

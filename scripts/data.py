@@ -40,7 +40,7 @@ schema = fl.Schema(fields=[fl.Field.from_descriptor(metadata.fields.caseid)])
 # https://pythonfix.com/code/us-states-abbrev.py/
 # state name to two letter code dictionary
 
-us_state_to_abbrev = fl.Resource(path="data/state_abbrev_mappings.json").read_data()
+us_state_to_abbrev = fl.Resource(path="data/external/state_abbrev_mappings.json").read_data()
 state_cd = sourcedf.state.replace(us_state_to_abbrev)
 targetdf["state_cd"] = state_cd
 for field in fields.demographic:
@@ -128,7 +128,7 @@ schema.add_field(fl.Field.from_descriptor(field))
 
 # # %%
 ##### Add jcoin information ####
-jcoin_json = fl.Resource(path="data/jcoin_states.json").read_data()
+jcoin_json = fl.Resource(path="data/external/jcoin_states.json").read_data()
 
 jcoin_df = (
     pd.DataFrame(jcoin_json)
