@@ -30,10 +30,10 @@ Inspired by [cookie cutter for data science template]("https://drivendata.github
     ├── data
     │   ├── external       <- Data from third party sources.
     │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   ├── processed      <- The final, canonical data sets for modeling. NOTE: analytic dataset
+    │   └── raw            <- The original, immutable data dump NOTE: data pulled from P drive
     │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
+    ├── docs               <- A default ~~Sphinx~~ (markdown) project
     │
     ├── models             <- Trained and serialized models, model predictions, or model summaries
     │
