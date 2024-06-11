@@ -4,21 +4,27 @@ stigma-state-lvl
 State level analyses of opioid use disorder (OUD) using the JCOIN 
 MAARC Stigma Survey Protocol 2 ("in-depth")
 
-Project Organization
-------------
+## Usage
 
-NOTE: only included what makes sense for now. below is the default cookiecutter data science structure.
+1. In a virtual environment, get all packages used and dependencies in addition to the local module in `src`:
+    - If using pip/python/venv module: `pip install -f requirements.txt`
+    - [RECOMMENDED] If using conda/mamba: `conda env create -f conda-environment-lock.yaml`
+    ::important:: Remember to activate this virtual env before continuing!
 
-- [ ] TODO: use dvc for data file versioning
-- [ ] TODO: modify this to given directory (e.g., changed some of the src package names, changed docs to markdown
-- [ ] TODO: port to the more updated v2 cookie cutter data science template -- it is currently on the v2 branch of the cookiecutter data science repo (note this moves to mkdocs as in 1)
-- [ ] TODO: replace requirements.txt with the "locked" version (ChatGPT says using "locked" version is better for analytic repos for reproducibility and supporting both an unlocked and locked is possible but may increase complexity)
-    - NOTE: talked to Phil - he mentioned this may be overkill for most analyses. However, lets keep in here and decide at next "reorg" step as I think it could be still good for a proof of concept.
-- [ ] TODO: Makefile: Windows does not support Makefiles -- one potential solution is to use docker. I commented on this issue [in cookiecutter-datascience here](https://github.com/drivendata/cookiecutter-data-science/issues/333)
-- [ ] TODO: use datapackage.json in Makefile for any documentation or views (ie data dictionary, graphs etc)
-comfortability using mkdocs -- may not need this but put here just in case)
+2. Run from CLI: `dvc fetch` : download all files from remote.
+3. Run from CLI: `python scripts/data.py` TOODO: make function and put into `report.ipynb` to make easier (or use snakeMake?)
+4. `report.ipynb` : use the metadata, model, and visualization functions to make a report. This notebook's goal is to not only
+    report out on selected variable estimations but also to demostrate the utility of frictionless in the context of an analytic 
+    report/explroation.
+
+
+## Project Organization
+
+Inspired by [cookie cutter for data science template]("https://drivendata.github.io/cookiecutter-data-science/")
+
+
     
-
+```
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
     │   ├── external       <- Data from third party sources.
@@ -34,56 +40,38 @@ comfortability using mkdocs -- may not need this but put here just in case)
     │                         the creator's initials, and a short `-` delimited description, e.g.
     │                         `1.0-jqp-initial-data-exploration`.
     │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
+    ├── references         <- [NOT USED CURRENTLY] Data dictionaries, manuals, and all other explanatory materials. NOTE -- could put "human rendered" schema here and other manuals or pdfs.
     │
     ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
     │   └── figures        <- Generated graphics and figures to be used in reporting
     │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
+    ├── requirements-lock.txt   <- The requirements file for reproducing the analysis environment, e.g.
+    │                         generated with `pip freeze > requirements.txt`
     │
     ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
     ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
     │   │
     │   ├── data           <- Scripts to download or generate data
     │   │   └── transform.py
     │   │
     │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions 
-    │   │   ├── taylor_series.py
+    │   │   │                 predictions NOTE: in this case we are just estimating the point estimates/variance of variables of interest
+    │   │   ├── estimates.py
     │   │  
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+    │       └── visualize.py <- contains bar charts of estimates and usa maps for state estimates
+
+```
+
+## Saving and committing notebooks
+commit jupyter notebook without output to git and keep output locally: 
+https://gist.github.com/33eyes/431e3d432f73371509d176d0dfb95b6e
+
+NOTE: 
+- you have to have activated a virtualenv with nbconvert installed at the time you add/commit a jupyter nb for this to work 
 
 
---------
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
-
-
-
-Old Readme
-------
-# stigma-state-lvl
-state level oud stigma estimate collaboration work with b. taylor and p. lamuda
-
-# Usage
-
-Get all packages used and dependencies:
-`pip install -f requirements.txt`
-
-# notebooks
-
-`personaluse_ever_protocol2<latestn>.ipynb` contains the latest analysis.
-
-Functions for this notebook have been refactored to `utils.py`
-
-
-`strata-and-clusters-exploration`
-contains exploration to identify the proper 
-groups with the goal of understanding how to 
-make correct bootstrap weights
