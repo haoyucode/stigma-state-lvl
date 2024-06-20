@@ -6,6 +6,7 @@ MAARC Stigma Survey Protocol 2 ("in-depth")
 
 ## Usage
 
+1. git clone git@github.com:norc-heal/stigma-state-lvl.git
 1. In a virtual environment, get all packages used and dependencies in addition to the local module in `src`:
     - If using pip/python/venv module: `pip install -f requirements.txt`
     - [RECOMMENDED] If using conda/mamba: `conda env create -f conda-environment-lock.yaml`
