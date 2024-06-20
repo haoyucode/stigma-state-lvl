@@ -1,5 +1,7 @@
 [core]
     remote = pdrive
     autostage = true
-['remote "pdrive"']
+['remote "pdrive-3652"']
     url = P:\3652\Common\HEAL\y3-task-c-collaborative-projects\jcoin-stigma\analyses\data\dvc
+['remote "pdrive-3645"']
+    url = "P:\3645\Common\Protocol 2 Custom Survey\Wave 1\Analysis\dvc"
