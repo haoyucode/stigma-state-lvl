@@ -8,3 +8,4 @@ pandas>=1.4
 joblib>=1.2.0
 samplics>=0.4.8
 frictionless>=5.0
+dvc
