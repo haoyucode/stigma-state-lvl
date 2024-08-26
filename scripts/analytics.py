@@ -11,14 +11,33 @@ df = resource.to_pandas()
 modelpath = Path(__file__).parents[1].joinpath("models")
 modelpath.mkdir(exist_ok=True)
 field_names = [
-    "ss_6_past",
-    "ss_6_current",
-    "ss_10_past",
-    "ss_10_current",
-    "racial_privilege",
-    # 'expanded_10item_stigma',
-    # 'stigma_scale_score'
-
+#  'age4',
+#  'racethnicity',
+#  'educ5',
+ 'ss_a_historywork',
+ 'ss_b_historymarry',
+ 'ss_historysteal',
+ 'ss_historyhighrisk',
+ 'ss_c_currentwork',
+ 'ss_d_currentmarry',
+ 'ss_e_dangerous',
+ 'ss_f_trust',
+ 'ss_currentsteal',
+ 'ss_currenthighrisk',
+ 'ss_6_past',
+ 'ss_6_current',
+ 'stigma_6item_composite',
+ 'ss_10_past',
+ 'ss_10_current',
+ 'stigma_10item_composite',
+ 'race_whiteadvantage',
+ 'race_successful',
+ 'race_prison',
+ 'race_socservices',
+ 'race_minadvantage',
+ 'race_rich',
+ 'race_whiteblame',
+ 'racial_privilege'
 ]
 for name in field_names:
     ycol =name
